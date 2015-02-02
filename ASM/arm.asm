@@ -21,5 +21,5 @@ MultiBootHeader:
 
 ;you can modify these
 start:
-push ebx ;this is optional and load's the grub structure
-call _kernel_main
+	push ebx ;this is optional and load's the grub structure
+	call kernel_main
