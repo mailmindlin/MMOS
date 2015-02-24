@@ -1,0 +1,22 @@
+Description:
+	Compiles & links m-assembly code for many different architectures.
+
+Usage:
+	java -jar MAssembler.jar [option...] [file...]
+
+Options:
+	-o name
+		Specify the output file name/location instead of [filename].out
+
+	-arch arch_type
+		Specify the target architechture to compile for. Default: ARMv6
+
+	-I include_directory
+		Add a directory to the list to search for includes. Note that the current directory is
+		automatically added to the top of the list.
+	
+	-h, --help, /?
+		Print this message and exit.
+		
+	-q
+		Operate in quiet mode (no debug except from errors)
