@@ -1,0 +1,28 @@
+/*
+ * Exception
+ *
+ *  Created on: Feb 19, 2015
+ *      Author: wfeehery17
+ */
+
+#ifndef STD_EXCEPTIONS_EXCEPTION_
+#define STD_EXCEPTIONS_EXCEPTION_
+
+#include "../lang/Object.hpp"
+#include "../lang/String.hpp"
+
+class Exception: public Object {
+public:
+	Exception(const char* msg) {
+		this->message = new String(msg);
+	}
+	String* toString() const{
+		return message;
+	}
+	~Exception() {
+		delete message;
+	}
+protected:
+	String* message;
+};
+#endif /* STD_EXCEPTIONS_EXCEPTION_ */
