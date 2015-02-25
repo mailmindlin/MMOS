@@ -35,6 +35,8 @@ local.properties
 # TeXlipse plugin
 .texlipse
 
-#yagarto stuff
+#compilers, etc.
 yagarto/*
 rpi-boot/*
+maker.jar
+_x-dnc*

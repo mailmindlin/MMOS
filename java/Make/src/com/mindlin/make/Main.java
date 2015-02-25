@@ -93,6 +93,7 @@ public class Main {
 			.addInference("verbose",false)
 			.inferAllUnset()
 			.clearInferences();
+		compiler=Compilers.getCompiler(properties.getString("COS"), properties.getString("TARCH"));
 		if(properties.getBool("verbose"))
 			properties.forEach((a,b)->{
 				System.out.print("\t"+a.toString()+":"+b.toString());
@@ -103,37 +104,7 @@ public class Main {
 	}
 	public static void exec(String cmd) {
 		final String command=cmd.toLowerCase().trim();
-		System.out.println("Make: "+cmd);
-		if(command.equals("build")) {
-			exec("compile");
-			exec("link");
-			exec("test");
-		}else if(command.equals("init") && (!finished.contains(command))) {
-			properties.<Compiler>getAs("compiler").init(properties);
-		}else if(command.equals("compile")) {
-			exec("init");
-			try {
-				properties.<Compiler>getAs("compiler").compile(properties);
-			} catch (IOException | InterruptedException e) {
-				e.printStackTrace();
-			}
-		}else if(command.equals("link")) {
-			try {
-				properties.<Compiler>getAs("compiler").link(properties);
-			} catch (IOException | InterruptedException e) {
-				e.printStackTrace();
-			}
-		}else if(command.equals("clean")) {
-			properties.<Compiler>getAs("compiler").clean(properties);
-		}else if(command.equals("test")) {
-			System.err.println("Testing has not yet been integrated.");
-		}else if(command.equals("check")) {
-			try {
-				properties.<Compiler>getAs("compiler").check(properties);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}else if(command.equals("about")) {
+		if(command.equals("about")) {
 			System.out.println("Version "+OS_VERSION+" of MMOS, written by Mailmindlin, 2015.");
 			System.out.println("Compiler (this piece of software) version " + VERSION);
 			System.out.println("Assembly source: "+properties.<File>getAs("src.asm"));
@@ -147,7 +118,7 @@ public class Main {
 				System.out.println(prop.getKey()+": "+prop.getValue());
 			}
 		}else
-			return;
+			Executor.runTask(properties, compiler, command);
 		finished.add(command);
 	}
 	public static void printHelp(String command) {

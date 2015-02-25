@@ -4,13 +4,7 @@ import java.util.ArrayList;
 
 public class Compilers {
 	public static void loadClasses() throws ClassNotFoundException {
-//		Class.forName("compilers.OSX_ARM");
-		Class.forName("compilers.RPI_ARM");
-//		Class.forName("compilers.OSX_8664");
-		Class.forName("compilers.Win_ARM");
-//		Class.forName("compilers.Win_8664");
-//		Class.forName("Linux_ARM");
-//		Class.forName("Linux_8664");
+		Class.forName("com.mindlin.make.RPI_ARM");
 	}
 	protected static ArrayList<Compiler> compilers = new ArrayList<Compiler>();
 	public static void register(Compiler c) {
