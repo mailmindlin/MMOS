@@ -14,7 +14,6 @@ public interface StdCommand<IMPL extends StdCommand<IMPL>> {
 	IMPL addTarget(Path target);
 	IMPL addTarget(String target);
 	IMPL setRelativeTo(String dir);
-	IMPL setRelativeTo(Path dir);
 	IMPL setArchitecture(String arch);
 	IMPL setCPU(String cpuName);
 	IMPL setFPU(String fpuName);

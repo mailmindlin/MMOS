@@ -2,7 +2,7 @@ package com.mindlin.make.assembler.rpi;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
 
@@ -22,10 +22,7 @@ public class ARM_EABI_Assembler extends Assembler<ARM_EABI_Assembler> {
 
 	@Override
 	public ARM_EABI_Assembler setOutput(String output) {
-		if(relativeTo!=null)
-			data.put("output", relativeTo.resolve(output));
-		else
-			data.put("output", Paths.get(output));
+		data.put("output", resolve(output));
 		return this;
 	}
 
@@ -38,13 +35,14 @@ public class ARM_EABI_Assembler extends Assembler<ARM_EABI_Assembler> {
 
 	@Override
 	public Set<String> getOptimizations() {
-		// TODO Auto-generated method stub
-		return null;
+		Set<String> result = new HashSet<String>();
+		result.add("memory");
+		return result;
 	}
 
 	@Override
 	public ARM_EABI_Assembler setOutput(Path output) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
@@ -121,6 +119,6 @@ public class ARM_EABI_Assembler extends Assembler<ARM_EABI_Assembler> {
 	@Override
 	public ARM_EABI_Assembler includeDir(Path dir) {
 		// TODO Auto-generated method stub
-		return null;
+		return this;
 	}
 }
