@@ -96,13 +96,8 @@ public class Properties extends ConcurrentHashMap<String, Object> {
 			return old;
 		}
 	}
-	public String AS() {
-		return getAs("compiler.assembly");
-	}
-	public String CC() {
-		return getAs("compiler.c");
-	}
-	public String CPP() {
-		return getAs("compiler.c++");
+
+	public String getString(String string) {
+		return this.<String>getAs(string);
 	}
 }

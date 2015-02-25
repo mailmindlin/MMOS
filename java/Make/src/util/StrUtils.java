@@ -22,6 +22,13 @@ public class StrUtils {
 		}
 		return result.toString();
 	}
+	public static String concat(Function<String, String> modifier, String... strings) {
+		StringBuilder result = new StringBuilder();
+		for (String string : strings) {
+			result.append(string.trim().isEmpty() ? "" : modifier.apply(string).trim());
+		}
+		return result.toString();
+	}
 
 	public static String concatWithSpaces(Collection<String> strings) {
 		return concatWithSpaces(strings.toArray(new String[strings.size()]));

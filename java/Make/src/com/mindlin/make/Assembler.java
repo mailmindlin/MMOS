@@ -1,6 +1,7 @@
 package com.mindlin.make;
 
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Set;
 
@@ -9,12 +10,12 @@ import org.json.JSONObject;
 
 import util.CmdUtil;
 
-public abstract class CCompiler<IMPL extends CCompiler<IMPL>> implements StdCommand<IMPL>{
+public abstract class Assembler<IMPL extends Assembler<IMPL>> implements StdCommand<IMPL> {
 	protected Path relativeTo=null;
 	protected JSONObject data = new JSONObject();
 	private final IMPL self;
 	@SuppressWarnings("unchecked")
-	public CCompiler() {
+	public Assembler() {
 		this.self=(IMPL)this;
 		data.put("flags", new JSONArray())
 			.put("targets", new JSONArray())
@@ -27,6 +28,7 @@ public abstract class CCompiler<IMPL extends CCompiler<IMPL>> implements StdComm
 					.put("suppressed", new JSONArray())
 					.put("shown", new JSONArray())));
 	}
+
 	/**
 	 * Define the given symbol with the value of 1
 	 * 
@@ -53,38 +55,41 @@ public abstract class CCompiler<IMPL extends CCompiler<IMPL>> implements StdComm
 	}
 	@Override
 	public IMPL addTarget(Path target) {
-		data.getJSONArray("targets").put(resolve(target));
+		if(relativeTo!=null &&(!target.isAbsolute()))
+			data.getJSONArray("targets").put(relativeTo.resolve(target));
+		else
+			data.getJSONArray("targets").put(target);
 		return self;
 	}
 
 	@Override
 	public IMPL addTarget(String target) {
-		data.getJSONArray("targets").put(resolve(target));
+		if(relativeTo!=null)
+			data.getJSONArray("targets").put(relativeTo.resolve(target));
+		else
+			data.getJSONArray("targets").put(Paths.get(target));
 		return self;
 	}
-	@Override
+	
 	public IMPL setCPU(String cpuName) {
 		data.getJSONObject("options").put("cpu", cpuName);
 		return self;
 	}
-	@Override
 	public IMPL setFPU(String fpuName) {
 		data.getJSONObject("options").put("fpu", fpuName);
 		return self;
 	}
-	@Override
-	public IMPL setGPU(String gpuName) {
-		data.getJSONObject("options").put("gpu", gpuName);
-		return self;
-	}
-	@Override
-	public IMPL setArchitecture(String arch) {
+	public IMPL setArch(String arch) {
 		data.getJSONObject("options").put("arch", arch);
 		return self;
 	}
-	@Override
 	public IMPL setRelativeTo(Path other) {
 		relativeTo=other;
+		return self;
+	}
+
+	public IMPL setArchitecture(String arch) {
+		data.getJSONObject("options").put("arch", arch);
 		return self;
 	}
 
@@ -95,7 +100,7 @@ public abstract class CCompiler<IMPL extends CCompiler<IMPL>> implements StdComm
 	 * @return self
 	 */
 	public IMPL suppressWarning(String type) {
-		data.getJSONObject("options").getJSONObject("warnings").getJSONArray("suppressed").put(type);
+		data.getJSONObject("options").getJSONObject("warnings").getJSONArray("shown").put(type);
 		return self;
 	}
 
@@ -162,7 +167,10 @@ public abstract class CCompiler<IMPL extends CCompiler<IMPL>> implements StdComm
 		return self;
 	}
 	public IMPL includeDir(String dir) {
-		includeDir(resolve(dir));
+		if(relativeTo!=null)
+			includeDir(relativeTo.resolve(dir));
+		else
+			includeDir(Paths.get(dir));
 		return self;
 	}
 	@Override
@@ -187,13 +195,4 @@ public abstract class CCompiler<IMPL extends CCompiler<IMPL>> implements StdComm
 	 * @return available optimizations
 	 */
 	public abstract Set<String> getOptimizations();
-
-	public abstract IMPL link(boolean aflag);
-
-	public abstract IMPL setLanguage(String lang);
-
-	public abstract IMPL setWorkingDirectory(Path nwd);
-
-	public abstract IMPL setWorkingDirectory(String nwd);
-
 }
