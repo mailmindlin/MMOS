@@ -2,7 +2,11 @@ package com.mindlin.make.assembler.rpi;
 
 import java.io.File;
 import java.nio.file.Path;
+<<<<<<< HEAD
 import java.util.HashSet;
+=======
+import java.nio.file.Paths;
+>>>>>>> 16c1fb1bff433f35054c5881f0d9f53b87f6d1b3
 import java.util.LinkedList;
 import java.util.Set;
 
@@ -22,7 +26,14 @@ public class ARM_EABI_Assembler extends Assembler<ARM_EABI_Assembler> {
 
 	@Override
 	public ARM_EABI_Assembler setOutput(String output) {
+<<<<<<< HEAD
 		data.put("output", resolve(output));
+=======
+		if(relativeTo!=null)
+			data.put("output", relativeTo.resolve(output));
+		else
+			data.put("output", Paths.get(output));
+>>>>>>> 16c1fb1bff433f35054c5881f0d9f53b87f6d1b3
 		return this;
 	}
 
@@ -35,14 +46,23 @@ public class ARM_EABI_Assembler extends Assembler<ARM_EABI_Assembler> {
 
 	@Override
 	public Set<String> getOptimizations() {
+<<<<<<< HEAD
 		Set<String> result = new HashSet<String>();
 		result.add("memory");
 		return result;
+=======
+		// TODO Auto-generated method stub
+		return null;
+>>>>>>> 16c1fb1bff433f35054c5881f0d9f53b87f6d1b3
 	}
 
 	@Override
 	public ARM_EABI_Assembler setOutput(Path output) {
+<<<<<<< HEAD
 		
+=======
+		// TODO Auto-generated method stub
+>>>>>>> 16c1fb1bff433f35054c5881f0d9f53b87f6d1b3
 		return null;
 	}
 
@@ -119,6 +139,10 @@ public class ARM_EABI_Assembler extends Assembler<ARM_EABI_Assembler> {
 	@Override
 	public ARM_EABI_Assembler includeDir(Path dir) {
 		// TODO Auto-generated method stub
+<<<<<<< HEAD
 		return this;
+=======
+		return null;
+>>>>>>> 16c1fb1bff433f35054c5881f0d9f53b87f6d1b3
 	}
 }
