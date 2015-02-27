@@ -8,9 +8,13 @@
 #ifndef STD_EXCEPTIONS_OUTOFMEMORYEXCEPTION_H_
 #define STD_EXCEPTIONS_OUTOFMEMORYEXCEPTION_H_
 
-#include "../../std/exceptions/Exception"
+#include "Exception.h"
 
-class OutOfMemoryException: public Exception {
+#if (!defined(EXC)) || (!defined(EXT))
+#define EXC
+#define EXT
+#endif
+EXC class OutOfMemoryException: public Exception {
 public:
 	OutOfMemoryException(const char* c) :
 			Exception(c) {

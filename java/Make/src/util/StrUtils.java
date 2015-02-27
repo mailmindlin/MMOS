@@ -178,4 +178,14 @@ public class StrUtils {
 			cp.add(i,modifier.apply(items[i]));
 		return (R[])cp.toArray();
 	}
+	public static String ofLength(char c, int length) {
+		return ofLength(""+c,length);
+	}
+	public static String ofLength(CharSequence c, int length) {
+		StringBuffer outputBuffer = new StringBuffer(length);
+		for (int i = 0; i < length; i++){
+		   outputBuffer.append(c);
+		}
+		return outputBuffer.toString();
+	}
 }

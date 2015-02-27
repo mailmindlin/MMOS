@@ -9,7 +9,10 @@
 #define STD_TIME_H_
 
 #include "../std/stdint.h"
-
+#if (!defined(EXC)) || (!defined(EXT))
+#define EXC
+#define EXT
+#endif
 EXT typedef uint64_t time_t;
 EXT typedef uint64_t clock_t;
 namespace Time {

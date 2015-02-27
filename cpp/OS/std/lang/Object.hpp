@@ -8,10 +8,14 @@
 #ifndef STDLIB_OBJECT_HPP_
 #define STDLIB_OBJECT_HPP_
 
-#include "../../std/lang/String.hpp"
 #include "../stdint.h"
+#include "String.hpp"
 
-class Object {
+#if (!defined(EXC)) || (!defined(EXT))
+#define EXC
+#define EXT
+#endif
+EXC class Object {
 public:
 	Object() {
 	}
@@ -28,7 +32,7 @@ public:
 	virtual void notifyAll() {/*do nothing*/
 	}
 	virtual String* toString() const {
-		void* ptr;
+		void* ptr=nullptr;
 		getPtr(ptr);
 		return String::valueOfPtr(ptr);
 	}

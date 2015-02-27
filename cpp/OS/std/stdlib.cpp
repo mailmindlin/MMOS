@@ -15,17 +15,20 @@
 #define EXT
 #define EXC
 #endif
-#include "../std/algorithm.h"
-#include "../std/limits.h"
-#include "../std/Math.h"
-#include "../std/memcpy.h"
-#include "../std/memory.h"
-#include "../std/RaspberryPi.h"
-#include "../std/stdasm.h"
-#include "../std/stddef.h"
-#include "../std/stdint.h"
-#include "../std/strlen.h"
-#include "../std/Time.cpp"
+#include "algorithm.h"
+#include "limits.h"
+#include "Math.h"
+#include "memcpy.h"
+#include "memory.h"
+#include "RaspberryPi.h"
+#include "stdasm.h"
+#include "stddef.h"
+#include "strlen.h"
+#include "Time.cpp"
+#include "exceptions/ArrayIndexOutOfBoundsException.h"
+#include "exceptions/Exception.h"
+#include "exceptions/NumberFormatException.h"
+#include "exceptions/OutOfMemoryException.h"
 #undef EXT
 #undef EXC
 #endif /* STDLIB_H_ */

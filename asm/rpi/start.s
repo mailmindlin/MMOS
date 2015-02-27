@@ -3,6 +3,8 @@
  
 // Make _start global.
 .globl _start
+.extern kernel_main
+.extern _exit
  
 // Entry point for the kernel.
 // r15 -> should begin execution at 0x8000.
@@ -35,7 +37,9 @@ _start:
 	// Call kernel_main
 	ldr r3, =kernel_main
 	blx r3
- 
+	//now call exit
+ 	ldr r3, =_exit
+ 	blx r3
 	// halt
 halt:
 	wfe

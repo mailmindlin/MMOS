@@ -52,11 +52,14 @@ StringBuffer& StringBuffer::operator <<(bool b) {
 }
 
 void StringBuffer::append(String& str) {
-	buff->addLast(str);
+	buff->addLast(&str);
 }
 
 void StringBuffer::append(const char* c) {
-	buff->addLast(*new String(c));
+	buff->addLast(new String(c));
+}
+void StringBuffer::append(String* s) {
+	buff->addLast(s);
 }
 
 StringBuffer& StringBuffer::operator <<(char c) {
@@ -78,6 +81,13 @@ size_t StringBuffer::length() {
 	size_t result = 0;
 	Iterator<String> * i = buff->iterator();
 	while (i->hasNext())
-		result += i->next().length();
+		result += i->next()->length();
 	return result;
+}
+const char* StringBuffer::toCharArray() {
+	String tmp = toString();
+	const char* result = tmp.toCharArray();
+	delete tmp;
+	return result;
+}
 }

@@ -1,24 +1,13 @@
 package com.mindlin.make;
 
 import java.nio.file.Path;
-<<<<<<< HEAD
-=======
-import java.nio.file.Paths;
->>>>>>> 16c1fb1bff433f35054c5881f0d9f53b87f6d1b3
-import java.util.Arrays;
 import java.util.Set;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import util.CmdUtil;
-
 public abstract class Assembler<IMPL extends Assembler<IMPL>> implements StdCommand<IMPL> {
-<<<<<<< HEAD
 	protected Path base=null;
-=======
-	protected Path relativeTo=null;
->>>>>>> 16c1fb1bff433f35054c5881f0d9f53b87f6d1b3
 	protected JSONObject data = new JSONObject();
 	private final IMPL self;
 	@SuppressWarnings("unchecked")
@@ -33,7 +22,8 @@ public abstract class Assembler<IMPL extends Assembler<IMPL>> implements StdComm
 					.put("show", false)
 					.put("max", -1)
 					.put("suppressed", new JSONArray())
-					.put("shown", new JSONArray())));
+					.put("shown", new JSONArray())))
+			.put("includes",new JSONArray());
 	}
 
 	/**
@@ -60,55 +50,23 @@ public abstract class Assembler<IMPL extends Assembler<IMPL>> implements StdComm
 		data.getJSONObject("defines").put(definition,value);
 		return self;
 	}
-<<<<<<< HEAD
-
-	@Override
-	public IMPL addTarget(String target) {
-		data.getJSONArray("targets").put(resolve(target));
-		return self;
-	}
 	@Override
 	public IMPL addTarget(Path target) {
 		data.getJSONArray("targets").put(resolve(target));
 		return self;
 	}
-	@Override
-=======
-	@Override
-	public IMPL addTarget(Path target) {
-		if(relativeTo!=null &&(!target.isAbsolute()))
-			data.getJSONArray("targets").put(relativeTo.resolve(target));
-		else
-			data.getJSONArray("targets").put(target);
-		return self;
-	}
-
-	@Override
-	public IMPL addTarget(String target) {
-		if(relativeTo!=null)
-			data.getJSONArray("targets").put(relativeTo.resolve(target));
-		else
-			data.getJSONArray("targets").put(Paths.get(target));
-		return self;
-	}
-	
->>>>>>> 16c1fb1bff433f35054c5881f0d9f53b87f6d1b3
 	public IMPL setCPU(String cpuName) {
 		data.getJSONObject("options").put("cpu", cpuName);
 		return self;
 	}
-<<<<<<< HEAD
 	@Override
-=======
->>>>>>> 16c1fb1bff433f35054c5881f0d9f53b87f6d1b3
 	public IMPL setFPU(String fpuName) {
 		data.getJSONObject("options").put("fpu", fpuName);
 		return self;
 	}
-<<<<<<< HEAD
 	@Override
-	public IMPL setGPU(String fpuName) {
-		data.getJSONObject("options").put("fpu", fpuName);
+	public IMPL setGPU(String gpuName) {
+		data.getJSONObject("options").put("gpu", gpuName);
 		return self;
 	}
 	@Override
@@ -117,17 +75,6 @@ public abstract class Assembler<IMPL extends Assembler<IMPL>> implements StdComm
 		return self;
 	}
 	@Override
-=======
-	public IMPL setArch(String arch) {
-		data.getJSONObject("options").put("arch", arch);
-		return self;
-	}
-	public IMPL setRelativeTo(Path other) {
-		relativeTo=other;
-		return self;
-	}
-
->>>>>>> 16c1fb1bff433f35054c5881f0d9f53b87f6d1b3
 	public IMPL setArchitecture(String arch) {
 		data.getJSONObject("options").put("arch", arch);
 		return self;
@@ -143,13 +90,10 @@ public abstract class Assembler<IMPL extends Assembler<IMPL>> implements StdComm
 		data.getJSONObject("options").getJSONObject("warnings").getJSONArray("shown").put(type);
 		return self;
 	}
-<<<<<<< HEAD
 	@Override
 	public Path getBaseDir() {
 		return base;
 	}
-=======
->>>>>>> 16c1fb1bff433f35054c5881f0d9f53b87f6d1b3
 
 	/**
 	 * Explicitly show warnings of given type
@@ -210,25 +154,17 @@ public abstract class Assembler<IMPL extends Assembler<IMPL>> implements StdComm
 
 	@Override
 	public IMPL flag(String flag, String... arguments) {
-		data.getJSONArray("flags").put(new JSONArray().put(flag).put(Arrays.asList(arguments)));
+		JSONArray consolidated = new JSONArray();
+		consolidated.put(flag);
+		for(String arg:arguments)
+			consolidated.put(arg);
+		data.getJSONArray("flags").put(consolidated);
 		return self;
 	}
-	public IMPL includeDir(String dir) {
-<<<<<<< HEAD
-		includeDir(resolve(dir));
-=======
-		if(relativeTo!=null)
-			includeDir(relativeTo.resolve(dir));
-		else
-			includeDir(Paths.get(dir));
->>>>>>> 16c1fb1bff433f35054c5881f0d9f53b87f6d1b3
+	public IMPL includeDir(Path dir) {
+		data.getJSONArray("includes").put(resolve(dir));
 		return self;
 	}
-	@Override
-	public boolean execute() {
-		return CmdUtil.exec(getCommand());
-	}
-	public abstract IMPL includeDir(Path dir);
 	/**
 	 * Add implementation-specific optimization. <br/>
 	 * Calling this method multiple times may override which optimization is
@@ -246,4 +182,9 @@ public abstract class Assembler<IMPL extends Assembler<IMPL>> implements StdComm
 	 * @return available optimizations
 	 */
 	public abstract Set<String> getOptimizations();
+	
+	public IMPL setOutput(Path p) {
+		data.put("output", p);
+		return self;
+	}
 }

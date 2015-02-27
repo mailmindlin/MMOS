@@ -1,6 +1,7 @@
 package com.mindlin.make.assembler.rpi;
 
 import java.io.File;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.Set;
@@ -8,36 +9,20 @@ import java.util.Set;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import util.CmdUtil;
-import util.CmdUtil.Result;
 import util.StrUtils;
 
-import com.mindlin.make.Assembler;
+import com.mindlin.make.CCompiler;
 
-public class ARM_EABI_Assembler extends Assembler<ARM_EABI_Assembler> {
-
-	public ARM_EABI_Assembler(String ARMGNU) {
+public class ARM_EABI_CppCompiler extends CCompiler<ARM_EABI_CppCompiler> {
+	public ARM_EABI_CppCompiler(String ARMGNU) {
 		super();
-		data.put("cmd", new File(ARMGNU + "as").getAbsolutePath());
-	}
-
-	@Override
-	public ARM_EABI_Assembler addOptimization(String optimization) {
-		if (optimization.equals("memory"))
-			flag("-reduce-memory-overheads");
-		return this;
-	}
-
-	@Override
-	public Set<String> getOptimizations() {
-		Set<String> result = new HashSet<String>();
-		result.add("memory");
-		return result;
+		data.put("cmd", new File(ARMGNU + "g++").getAbsolutePath());
 	}
 
 	@Override
 	public String[] getCommand() {
 		JSONArray result = new JSONArray();
+//		System.out.println(data);
 		result.put(0, data.getString("cmd"));
 		// options
 		{
@@ -47,9 +32,9 @@ public class ARM_EABI_Assembler extends Assembler<ARM_EABI_Assembler> {
 					if (k.equals("warnings") && (v instanceof JSONObject)) {
 						JSONObject warnings = (JSONObject) v;
 						if (warnings.getBoolean("suppress")) {
-							result.add("--no-warn");
+							result.add("-w");
 						} else if (warnings.getBoolean("show")) {
-							result.add("--warn");
+							result.add("-Wall");
 						}
 						warnings.getJSONArray("shown").forEach(
 								(tmp) -> {
@@ -77,47 +62,59 @@ public class ARM_EABI_Assembler extends Assembler<ARM_EABI_Assembler> {
 										System.out.println("Unknown warning: " + warning);
 									}
 								});
-						if (warnings.getInt("max") > -1)
-							result.put("-fmax-errors="+warnings.getInt("max"));
+					} else if (k.equals("ldscript") && (v instanceof Path)) {
+						String vstr=((Path)v).toString().trim();
+//						System.out.println("Linker script: "+vstr);
+						result.put("-Wl,-T,"+vstr);
 					}
 				} else {
 					String vstr = (String) v;
 					if (k.equals("cpu")) {
-						result.put("-mcpu="+vstr);
+						result.put("-Wa,-mcpu="+vstr);
 					} else if (k.equals("fpu")) {
-						result.put("-mfpu="+vstr);
+						result.put("-Wa,-mfpu="+vstr);
 						// force hard floats
-						result.put("-mfloat-abi=hard");
+						result.put("-Wa,-mfloat-abi=hard");
 					} else if (k.equals("gpu")) {
-						result.put("-mgpu="+vstr);
+						result.put("-Wa,-mgpu="+vstr);
 					} else if (k.equals("arch")) {
-						result.put("-march="+vstr);
+						result.put("-Wa,-march="+vstr);
 					} else if (k.equals("statistics")) {
-						result.put("--statistics");
+						result.put("-time");
+						result.put("-Wa,--statistics");
+					} else if (k.equals("language")) {
+						result.put("-std="+vstr);
 					}
 				}
 			});
+			if(!options.optBoolean("compile", true)) {
+				result.put("-E");
+			}else if(!options.optBoolean("assemble",true)) {
+				result.put("-S");
+			}else if(!options.optBoolean("link",true)) {
+				result.put("-c");
+			}
 		}
 		// add flags
 		data.getJSONArray("flags").forEach((o)->{
-			if (o instanceof JSONArray) {
+			if (o instanceof JSONArray)
 				result.addAll(1, StrUtils.convertList(
-						(i) -> {
-							String out = ("-"+((i instanceof String) ? (String) i : i.toString()));
-							if(out.equalsIgnoreCase("-fpic"))
-								return "-k";
-							return out;
-						}, (JSONArray) o));
-			}
+						(i) -> ("-"+((i instanceof String) ? (String) i : i.toString())), (JSONArray) o));
 			else
 				throw new IllegalStateException("Illegal flag type: " + o.getClass().getCanonicalName());
 		});
 		data.getJSONObject("defines").forEach((k,v)->{
-			result.put("--defsym").put(k+"="+v);
+			result.put("-Wa,--defsym,"+k+"="+v);
+		});
+		data.getJSONArray("libraries").forEach((o)->{
+			result.put("-Wl,--library,"+o.toString());
 		});
 		data.getJSONArray("includes").forEach((o)->{
 			if (o instanceof Path) {
-				result.put("-I").put(((Path) o).toFile().getPath());
+				if(Files.isDirectory((Path)o))
+					result.put("-Wl,-L,"+((Path) o).toFile().getPath());
+				else
+					result.put("-l"+((Path) o).toFile().getPath());
 			} else {
 				throw new IllegalStateException("Illegal include type: " + o.getClass().getCanonicalName());
 			}
@@ -133,17 +130,24 @@ public class ARM_EABI_Assembler extends Assembler<ARM_EABI_Assembler> {
 			result.put("-o").put(data.<Path>getAs("output").toString());
 		return StrUtils.toStringArray(result);
 	}
+
 	@Override
-	public boolean execute() {
-		Result r = CmdUtil.exec(getCommand());
-		r.printErrorLog();
-		r.printLog();
-		boolean success=r.wasSuccess();
-		if(!success) {
-			for(Exception e:r.getExceptions())
-				e.printStackTrace();
-			return false;
-		}
-		return true;
+	public ARM_EABI_CppCompiler addOptimization(String optimization) {
+		flag("-"+optimization);
+		return null;
+	}
+
+	@Override
+	public Set<String> getOptimizations() {
+		Set<String> result = new HashSet<String>();
+		result.add("O1");
+		result.add("O2");
+		return result;
+	}
+
+	@Override
+	public ARM_EABI_CppCompiler setWorkingDirectory(Path nwd) {
+		flag("-working-directory",resolve(nwd).toString());
+		return this;
 	}
 }

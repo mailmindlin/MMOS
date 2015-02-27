@@ -7,6 +7,10 @@
 
 #ifndef STD_ALGORITHM_H_
 #define STD_ALGORITHM_H_
+#if (!defined(EXC)) || (!defined(EXT))
+#define EXC
+#define EXT
+#endif
 namespace std {
 EXT char toLower(char input) {
 	if (input >= 'A' && input <= 'Z')

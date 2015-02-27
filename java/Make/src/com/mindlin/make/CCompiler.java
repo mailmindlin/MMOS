@@ -1,16 +1,13 @@
 package com.mindlin.make;
 
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.Set;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import util.CmdUtil;
-
 public abstract class CCompiler<IMPL extends CCompiler<IMPL>> implements StdCommand<IMPL>{
-	protected Path relativeTo=null;
+	protected Path base=null;
 	protected JSONObject data = new JSONObject();
 	private final IMPL self;
 	@SuppressWarnings("unchecked")
@@ -25,7 +22,18 @@ public abstract class CCompiler<IMPL extends CCompiler<IMPL>> implements StdComm
 					.put("show", false)
 					.put("max", -1)
 					.put("suppressed", new JSONArray())
-					.put("shown", new JSONArray())));
+					.put("shown", new JSONArray())))
+			.put("includes", new JSONArray())
+			.put("libraries", new JSONArray());
+	}
+	@Override
+	public Path getBaseDir() {
+		return base;
+	}
+	@Override
+	public IMPL setBaseDir(Path nb) {
+		base=nb;
+		return self;
 	}
 	/**
 	 * Define the given symbol with the value of 1
@@ -36,6 +44,14 @@ public abstract class CCompiler<IMPL extends CCompiler<IMPL>> implements StdComm
 	 */
 	public IMPL define(String definition) {
 		return define(definition,"1");
+	}
+	public IMPL ldFlag(String ...flags) {
+		StringBuffer sb = new StringBuffer();
+		for(String flag:flags) {
+			sb.append(",");
+			sb.append(flag.trim());
+		}
+		return flag("Wl"+sb.toString());
 	}
 
 	/**
@@ -53,12 +69,6 @@ public abstract class CCompiler<IMPL extends CCompiler<IMPL>> implements StdComm
 	}
 	@Override
 	public IMPL addTarget(Path target) {
-		data.getJSONArray("targets").put(resolve(target));
-		return self;
-	}
-
-	@Override
-	public IMPL addTarget(String target) {
 		data.getJSONArray("targets").put(resolve(target));
 		return self;
 	}
@@ -80,11 +90,6 @@ public abstract class CCompiler<IMPL extends CCompiler<IMPL>> implements StdComm
 	@Override
 	public IMPL setArchitecture(String arch) {
 		data.getJSONObject("options").put("arch", arch);
-		return self;
-	}
-	@Override
-	public IMPL setRelativeTo(Path other) {
-		relativeTo=other;
 		return self;
 	}
 
@@ -158,18 +163,23 @@ public abstract class CCompiler<IMPL extends CCompiler<IMPL>> implements StdComm
 
 	@Override
 	public IMPL flag(String flag, String... arguments) {
-		data.getJSONArray("flags").put(new JSONArray().put(flag).put(Arrays.asList(arguments)));
-		return self;
-	}
-	public IMPL includeDir(String dir) {
-		includeDir(resolve(dir));
+		JSONArray consolidated = new JSONArray();
+		consolidated.put(flag);
+		for(String arg:arguments)
+			consolidated.put(arg);
+		data.getJSONArray("flags").put(consolidated);
 		return self;
 	}
 	@Override
-	public boolean execute() {
-		return CmdUtil.exec(getCommand());
+	public IMPL setOutput(Path output) {
+		data.put("output", resolve(output));
+		return self;
 	}
-	public abstract IMPL includeDir(Path dir);
+	@Override
+	public IMPL includeDir(Path dir) {
+		data.getJSONArray("includes").put(resolve(dir));
+		return self;
+	}
 	/**
 	 * Add implementation-specific optimization. <br/>
 	 * Calling this method multiple times may override which optimization is
@@ -188,12 +198,38 @@ public abstract class CCompiler<IMPL extends CCompiler<IMPL>> implements StdComm
 	 */
 	public abstract Set<String> getOptimizations();
 
-	public abstract IMPL link(boolean aflag);
+	public IMPL link(boolean aflag) {
+		data.getJSONObject("options").put("link", aflag);
+		return self;
+	}
+	
+	public IMPL compile(boolean aflag) {
+		data.getJSONObject("options").put("compile", aflag);
+		return self;
+	}
+	
+	public IMPL assemble(boolean aflag) {
+		data.getJSONObject("options").put("assemble", aflag);
+		return self;
+	}
 
-	public abstract IMPL setLanguage(String lang);
+	public IMPL setLanguage(String lang) {
+		data.getJSONObject("options").put("language", lang);
+		return self;
+	}
 
 	public abstract IMPL setWorkingDirectory(Path nwd);
 
-	public abstract IMPL setWorkingDirectory(String nwd);
-
+	public IMPL setWorkingDirectory(String nwd) {
+		return setWorkingDirectory(resolve(nwd));
+	}
+	
+	public IMPL addLibrary(String libname) {
+		data.getJSONArray("libraries").put(libname);
+		return self;
+	}
+	public IMPL setLinkerScript(Path script) {
+		data.getJSONObject("options").put("ldscript", script);
+		return self;
+	}
 }

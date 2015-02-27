@@ -5,13 +5,16 @@
  *      Author: wfeehery17
  */
 
-#ifndef STD_EXCEPTIONS_EXCEPTION_
-#define STD_EXCEPTIONS_EXCEPTION_
+#ifndef STD_EXCEPTIONS_EXCEPTION_H_
+#define STD_EXCEPTIONS_EXCEPTION_H_
 
 #include "../lang/Object.hpp"
 #include "../lang/String.hpp"
-
-class Exception: public Object {
+#if (!defined(EXC)) || (!defined(EXT))
+#define EXC
+#define EXT
+#endif
+EXC class Exception: public Object {
 public:
 	Exception(const char* msg) {
 		this->message = new String(msg);
@@ -25,4 +28,4 @@ public:
 protected:
 	String* message;
 };
-#endif /* STD_EXCEPTIONS_EXCEPTION_ */
+#endif /* STD_EXCEPTIONS_EXCEPTION_H_ */

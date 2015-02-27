@@ -1,6 +1,7 @@
 package util;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
@@ -54,6 +55,15 @@ public class Properties extends ConcurrentHashMap<String, Object> {
 	}
 	public File getFile(String key) {
 		return this.<File>getAs(key);
+	}
+	public Path getPath(String key) {
+		Object o = get(key);
+		if(o instanceof File)
+			return ((File)o).toPath();
+		else if(o instanceof Path)
+			return (Path) o;
+		else
+			return null;
 	}
 
 	@SuppressWarnings("unchecked")

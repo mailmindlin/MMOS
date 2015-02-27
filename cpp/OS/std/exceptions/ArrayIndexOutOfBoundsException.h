@@ -7,10 +7,15 @@
 
 #ifndef STD_EXCEPTIONS_ARRAYINDEXOUTOFBOUNDSEXCEPTION_H_
 #define STD_EXCEPTIONS_ARRAYINDEXOUTOFBOUNDSEXCEPTION_H_
-#include "../../std/exceptions/Exception"
-#include "../lang/String.hpp"
 
-class ArrayIndexOutOfBoundsException: public Exception {
+#include "../RaspberryPi.h"
+#include "Exception.h"
+
+#if (!defined(EXC)) || (!defined(EXT))
+#define EXC
+#define EXT
+#endif
+EXC class ArrayIndexOutOfBoundsException: public Exception {
 public:
 	ArrayIndexOutOfBoundsException() :
 			Exception("Index out of range.") {

@@ -5,17 +5,24 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.util.LinkedList;
+import java.util.List;
 
 import util.PipingStreams.PipingInputStream;
 import util.PipingStreams.PipingOutputStream;
 
 public class CmdUtil {
-	public static void exec(Properties props, String...commands) throws IOException, InterruptedException {
+	public static void exec(Properties props, String... commands) throws IOException,
+			InterruptedException {
 		exec(props, StrUtils.concatWithSpaces(commands));
 	}
-	public static void exec(Properties props, File output, String...commands) throws IOException, InterruptedException {
+
+	public static void exec(Properties props, File output, String... commands) throws IOException,
+			InterruptedException {
 		exec(props, StrUtils.concatWithSpaces(commands), output);
 	}
+
 	public static void exec(Properties props, String command) throws IOException, InterruptedException {
 		PipingOutputStream procStdOut = null, procErrOut = null;
 		PipingInputStream procStdIn = null;
@@ -24,7 +31,9 @@ public class CmdUtil {
 		procStdIn = new PipingInputStream(System.in);
 		exec(props, command, procStdOut, procErrOut, procStdIn);
 	}
-	public static void exec(Properties props, String command, File output) throws IOException, InterruptedException {
+
+	public static void exec(Properties props, String command, File output) throws IOException,
+			InterruptedException {
 		PipingOutputStream procStdOut = null, procErrOut = null;
 		PipingInputStream procStdIn = null;
 		procStdOut = new PipingOutputStream(new FileOutputStream(output));
@@ -32,25 +41,24 @@ public class CmdUtil {
 		procStdIn = new PipingInputStream(System.in);
 		exec(props, command, procStdOut, procErrOut, procStdIn);
 	}
-	public static void exec(Properties props, String command, PipingOutputStream procStdOut, PipingOutputStream procErrOut, PipingInputStream procStdIn) throws IOException, InterruptedException {
+
+	public static void exec(Properties props, String command, PipingOutputStream procStdOut,
+			PipingOutputStream procErrOut, PipingInputStream procStdIn) throws IOException,
+			InterruptedException {
 		if ((props.<Integer> getOrUse("debug", 2)) > 1)
 			System.out.println(command);
 		Process proc = null;
 		PipingOutputStream stdOut = null;
 		PipingInputStream stdIn = null, errIn = null;
 		try {
-			procStdOut = new PipingOutputStream(System.out);
-			procErrOut = new PipingOutputStream(System.err);
-			procStdIn = new PipingInputStream(System.in);
-			proc = props.<Runtime> getOrUse("runtime", Runtime.getRuntime())
-					.exec(command);
+			proc = props.<Runtime> getOrUse("runtime", Runtime.getRuntime()).exec(command);
 			stdIn = new PipingInputStream(proc.getInputStream(), procStdOut);
 			errIn = new PipingInputStream(proc.getInputStream(), procErrOut);
 			stdOut = new PipingOutputStream(procStdIn, proc.getOutputStream());
 			do {
 				stdIn.pipe(-1);
 				errIn.pipe(-1);
-//				stdOut.pipe(-1);
+				// stdOut.pipe(-1);
 				Thread.sleep(50);// don't hog all the CPU power
 			} while (proc.isAlive());
 			procStdOut.close();
@@ -94,30 +102,120 @@ public class CmdUtil {
 				}
 		}
 	}
-	public static boolean exec(String...command) {
+
+	public static Result exec(String... command) {
+		final List<String> log = new LinkedList<String>(), errLog = new LinkedList<String>();
+		final List<Exception> errs = new LinkedList<Exception>();
+		System.out.println("Running: " + StrUtils.concatWithSpaces(command));
+		Process proc = null;
 		try {
-			Process proc = Runtime.getRuntime().exec(command);
-
-			BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
-
-			BufferedReader stdError = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
-
-			// read the output from the command
-			System.out.println("Here is the standard output of the command:\n");
-			String s = null;
-			while ((s = stdInput.readLine()) != null) {
-				System.out.println(s);
-			}
-
-			// read any errors from the attempted command
-			System.out.println("Here is the standard error of the command (if any):\n");
-			while ((s = stdError.readLine()) != null) {
-				System.err.println(s);
-			}
-			return true;
+			proc = Runtime.getRuntime().exec(command);
 		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
+			errs.add(e);
+			if (proc == null)
+				return new Result(false, log, errLog, errs);
+		}
+
+		BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+		BufferedReader stdError = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
+		String tmp = null;
+		try {
+			do {
+				log.add((tmp = stdInput.readLine()));
+			} while (tmp != null);
+		} catch (Exception e) {
+			errs.add(e);
+		}
+
+		// read any errors from the attempted command
+		try {
+			do {
+				log.add((tmp = stdError.readLine()));
+			} while (tmp != null);
+		} catch (Exception e) {
+			errs.add(e);
+		}
+		return new Result(true,log,errLog,errs);
+	}
+
+	public final static class Result {
+		protected final boolean success;
+		protected final String[] errorLog;
+		protected final String[] log;
+		protected final Exception[] errors;
+
+		public Result(List<String> errorLog, List<String> log, List<Exception> exceptions) {
+			this(exceptions.size() == 0, errorLog, log, exceptions);
+		}
+
+		public Result(boolean success, List<String> errorLog, List<String> log,
+				List<Exception> exceptions) {
+			this(success, errorLog.toArray(new String[log.size()]),
+					log.toArray(new String[log.size()]), exceptions.toArray(new Exception[exceptions
+							.size()]));
+		}
+
+		public Result(String[] errorLog, String[] log, Exception... exceptions) {
+			this(exceptions.length == 0, errorLog, log, exceptions);
+		}
+
+		public Result(boolean success, String[] errorLog, String[] log, Exception... exceptions) {
+			this.success = success;
+			errors = exceptions;
+			this.errorLog = errorLog;
+			this.log = log;
+		}
+
+		public boolean wasSuccess() {
+			return success;
+		}
+
+		public String[] getErrorLog() {
+			return errorLog;
+		}
+
+		public String[] getLog() {
+			return log;
+		}
+
+		public Exception[] getExceptions() {
+			return errors;
+		}
+
+		public Result printErrorLog() {
+			return printErrorLog(0, System.err);
+		}
+
+		public Result printErrorLog(int tabs) {
+			return printErrorLog(tabs, System.err);
+		}
+
+		public Result printLog() {
+			return printLog(0, System.out);
+		}
+
+		public Result printLog(int tabs) {
+			return printLog(tabs, System.out);
+		}
+
+		public Result printLog(int tabs, PrintStream os) {
+			String prefix = StrUtils.ofLength('\t', tabs);
+			for (String line : log) {
+				if(line==null)
+					continue;
+				os.println(prefix + line);
+			}
+			return this;
+		}
+
+		public Result printErrorLog(int tabs, PrintStream os) {
+			String prefix = StrUtils.ofLength('\t', tabs);
+			for (String line : errorLog) {
+				if(line==null)
+					continue;
+				os.println(prefix + line);
+			}
+			return this;
 		}
 	}
 }

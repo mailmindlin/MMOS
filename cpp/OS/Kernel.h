@@ -6,12 +6,8 @@
  */
 #ifndef KERNEL_H_
 #define KERNEL_H_
-
-/**class Kernel {
- public:
- Kernel();
- virtual ~Kernel();
- };
- */
 void kernel_main();
+void render();
+void renderFrame();
+void abort();
 #endif /* KERNEL_H_ */

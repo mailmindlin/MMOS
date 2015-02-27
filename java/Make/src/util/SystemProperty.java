@@ -18,6 +18,7 @@ package util;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.Map;
@@ -911,5 +912,13 @@ public enum SystemProperty {
 			}
 		}
 		return buf.toString();
+	}
+	public static File whereAmI() {
+		try {
+			return new File(SystemProperty.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+			return new File(".");
+		}
 	}
 }

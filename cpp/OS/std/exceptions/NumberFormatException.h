@@ -8,16 +8,28 @@
 #ifndef STDLIB_EXCEPTIONS_NUMBERFORMATEXCEPTION_
 #define STDLIB_EXCEPTIONS_NUMBERFORMATEXCEPTION_
 
-#include "../../std/exceptions/Exception"
 #include "../lang/String.hpp"
+#include "../RaspberryPi.h"
+#include "../util/StringBuffer.h"
+#include "Exception.h"
 
-class NumberFormatException: public Exception {
+#if (!defined(EXC)) || (!defined(EXT))
+#define EXC
+#define EXT
+#endif
+EXC class NumberFormatException: public Exception {
 public:
 	NumberFormatException(const char* c) :
 			Exception(c) {
 	}
 	static NumberFormatException& forInputString(String& s) {
-		return new NumberFormatException("For input string: \"" + s + "\"");
+		StringBuffer* sb = new StringBuffer();
+		(*sb)<<"For input string: \"";
+		(*sb)<<s;
+		(*sb)<<'"';
+		const char* result = sb->toCharArray();
+		delete sb;
+		return *(new NumberFormatException(result));
 	}
 };
 

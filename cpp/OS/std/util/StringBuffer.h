@@ -20,6 +20,8 @@ public:
 	String& toString();
 	void append(String& str);
 	void append(const char* str);
+	void append(String* s);
+	const char* toCharArray();
 	StringBuffer& operator<<(String& str);
 	StringBuffer& operator<<(const char* c);
 	StringBuffer& operator<<(bool c);

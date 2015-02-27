@@ -7,6 +7,10 @@
 
 #ifndef STD_MATH_H_
 #define STD_MATH_H_
+#if (!defined(EXC)) || (!defined(EXT))
+#define EXC
+#define EXT
+#endif
 namespace Math {
 EXC template<typename num>
 num abs(num n) {

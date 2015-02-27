@@ -38,16 +38,13 @@ EXC inline uint32_t mmio_read(uint32_t addr) {
 	return data;
 }
 EXC inline uint64_t mmio_readd(uint32_t reg, uint32_t shift) {
-#ifdef PURE_LDRD
 	uint32_t *ptr = (uint32_t*) reg;
 	uint32_t *sptr= (uint32_t*) shift;
 	uint32_t data0, data1;
+#ifdef PURE_LDRD
 	asm volatile("ldrd %[data0], %[data1], [%[reg], %[shft]] (!)" : [data0]"=r"(data0), [data1]"=r"(data1) : [reg]"r"(ptr), [shft]"r"(sptr) : );
 	return data0 | (((uint64_t) data1) << 32);
 #else
-	uint32_t *ptr = (uint32_t*) reg;
-	uint32_t *sptr = (uint32_t*) shift;
-	uint32_t data0, data1;
 	asm volatile("ldr %[data0], [%[reg], %[shft]]" : [data0]"=r"(data0) : [reg]"r"(ptr), [shft]"r"(sptr) : );
 	asm volatile("ldr %[data1], [%[reg], %[shft]]" : [data1]"=r"(data1) : [reg]"r"(ptr), [shft]"r"(sptr) : );
 	return data0 | (((uint64_t) data1) << 32);
