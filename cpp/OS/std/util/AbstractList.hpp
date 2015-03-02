@@ -8,12 +8,12 @@
 #ifndef STD_UTIL_ABSTRACTLIST_HPP_
 #define STD_UTIL_ABSTRACTLIST_HPP_
 
-#include "../../std/stddef.h"
-#include "../../std/util/AbstractCollection.hpp"
-#include "../../std/util/Collection.hpp"
-#include "../../std/util/Iterator.hpp"
-#include "../../std/util/List.hpp"
-#include "../../std/util/ListIterator.hpp"
+#include <x-stddef.h>
+#include "AbstractCollection.hpp"
+#include "Collection.hpp"
+#include "Iterator.hpp"
+#include "List.hpp"
+#include "ListIterator.hpp"
 
 template<class T>
 class AbstractList: public List<T>, public AbstractCollection<T> {

@@ -22,7 +22,9 @@ public class RPI implements Compiler {
 
 	@Override
 	public boolean accept(Properties props) {
-		return props.getOrDefault("target", "n/a").equals("rpi1") || props.getString("target.arch").equalsIgnoreCase("armv6");
+		if(props.containsKey("target"))
+			return props.getString("target").equalsIgnoreCase("rpi1");
+		return props.getString("target.arch").equalsIgnoreCase("armv6");
 	}
 
 	@Override

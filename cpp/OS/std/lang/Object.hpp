@@ -8,13 +8,13 @@
 #ifndef STDLIB_OBJECT_HPP_
 #define STDLIB_OBJECT_HPP_
 
-#include "../stdint.h"
-#include "String.hpp"
+#include <x-stdint.h>
 
 #if (!defined(EXC)) || (!defined(EXT))
 #define EXC
 #define EXT
 #endif
+class String;
 EXC class Object {
 public:
 	Object() {
@@ -31,10 +31,10 @@ public:
 	}
 	virtual void notifyAll() {/*do nothing*/
 	}
-	virtual String* toString() const {
+	virtual String& toString() const {
 		void* ptr=nullptr;
 		getPtr(ptr);
-		return String::valueOfPtr(ptr);
+		return valueOfPtr(ptr);
 	}
 	template<typename parent>
 	bool instanceof() const {
@@ -52,6 +52,7 @@ protected:
 	to cloneAs() const {
 		return (*this);
 	}
+	static String& valueOfPtr(const void* ptr);
 };
 
 #endif /* STDLIB_OBJECT_HPP_ */

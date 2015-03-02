@@ -8,9 +8,9 @@
 #ifndef STD_UTIL_NODEITERATOR_HPP_
 #define STD_UTIL_NODEITERATOR_HPP_
 
-#include "../../std/stddef.h"
-#include "../../std/util/ListIterator.hpp"
-#include "../../std/util/Node.hpp"
+#include <x-stddef.h>
+#include "ListIterator.hpp"
+#include "Node.hpp"
 
 template<typename T>
 class NodeIterator: public ListIterator<T> {

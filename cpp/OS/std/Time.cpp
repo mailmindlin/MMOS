@@ -7,7 +7,7 @@
 
 #include "../std/Time.h"
 
-#include "../std/stdint.h"
+#include <x-stdint.h>
 
 #define CLOCKS_PER_SEC 700000000;//clock runs @ ~700MHz
 namespace Time {

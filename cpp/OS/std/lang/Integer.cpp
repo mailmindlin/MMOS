@@ -5,12 +5,7 @@
  *      Author: wfeehery17
  */
 
-#include "../../std/lang/Integer.hpp"
-
-Integer::Integer() {
-	// TODO Auto-generated constructor stub
-
-}
+#include "Integer.hpp"
 
 Integer::~Integer() {
 	// TODO Auto-generated destructor stub

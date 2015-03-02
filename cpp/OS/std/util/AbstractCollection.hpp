@@ -8,12 +8,12 @@
 #ifndef STD_UTIL_ABSTRACTCOLLECTION_HPP_
 #define STD_UTIL_ABSTRACTCOLLECTION_HPP_
 
-#include "../../std/exceptions/OutOfMemoryException.h"
-#include "../../std/limits.h"
-#include "../../std/memory.h"
-#include "../../std/stddef.h"
-#include "../../std/util/Collection.hpp"
-#include "../../std/util/Iterator.hpp"
+#include <x-stddef.h>
+
+#include "../exceptions/OutOfMemoryException.h"
+#include "../limits.h"
+#include "Collection.hpp"
+#include "Iterator.hpp"
 
 template<class T>
 class AbstractCollection: public Collection<T> {

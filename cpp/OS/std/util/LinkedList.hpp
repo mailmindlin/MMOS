@@ -8,18 +8,21 @@
 #ifndef STD_UTIL_LINKEDLIST_HPP_
 #define STD_UTIL_LINKEDLIST_HPP_
 
-#include "../../std/stddef.h"
-#include "../../std/util/AbstractList.hpp"
-#include "../../std/util/Collection.hpp"
-#include "../../std/util/Node.hpp"
+#include <x-stddef.h>
+#include "AbstractList.hpp"
+#include "Collection.hpp"
+#include "Iterator.hpp"
+#include "List.hpp"
+#include "ListIterator.hpp"
+#include "Node.hpp"
 
 template<typename T>
 class LinkedList: public AbstractList<T> {
 public:
 	LinkedList();
 	LinkedList(Collection<T>* c);
-	void addFirst(T* o);
-	void addLast(T* o);
+	void addFirst(T& o);
+	void addLast(T& o);
 	void addAt(size_t index, T* o);
 	T& get(size_t index);
 	bool contains(T* t) const;

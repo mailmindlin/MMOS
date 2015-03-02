@@ -7,6 +7,8 @@
 
 #include "BSC.h"
 
+#include <x-stddef.h>
+
 void BSC::begin() {
 }
 

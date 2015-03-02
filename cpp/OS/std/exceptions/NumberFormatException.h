@@ -8,9 +8,9 @@
 #ifndef STDLIB_EXCEPTIONS_NUMBERFORMATEXCEPTION_
 #define STDLIB_EXCEPTIONS_NUMBERFORMATEXCEPTION_
 
+#include "../lang/Object.cpp"
 #include "../lang/String.hpp"
-#include "../RaspberryPi.h"
-#include "../util/StringBuffer.h"
+#include "../util/StringBuffer.hpp"
 #include "Exception.h"
 
 #if (!defined(EXC)) || (!defined(EXT))

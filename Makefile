@@ -1,17 +1,33 @@
+# Current directory
 ROOT?=$(shell pwd)/
+# For the binary files
 BIN?=$(ROOT)bin/
-JBIN=$(BIN)java/
-ABIN=$(BIN)asm/
-CBIN=$(BIN)cpp/
-JSRC=$(ROOT)java/
-ASRC=$(ROOT)asm/rpi
-CSRC=$(ROOT)cpp/OS/
-LSRC=$(ROOT)linker/
-OUT=$(BIN)Kernel.img
-MAKER?=@java -jar $(JBIN)maker.jar $(JFLAGS)
-JFLAGS?=-arch armv6 -targ rpi1 --src-asm $(ASRC) --src-java $(JSRC) --src-c++ $(CSRC) --src-ld $(LSRC) --bin-asm $(ABIN) --bin $(BIN) --bin-java $(JBIN) --bin-asm $(ABIN) -o $(OUT)
+# Not really used
+JBIN?=$(BIN)java/
+# For the compiled assembly files
+ABIN?=$(BIN)asm/
+# For the compiled C++ libraries
+CBIN?=$(BIN)cpp/
+# Where the java source code is
+JSRC?=$(ROOT)java/
+# Assembly source code
+ASRC?=$(ROOT)asm/rpi
+# C++ source code
+CSRC?=$(ROOT)cpp/OS/
+# linker script source
+LSRC?=$(ROOT)linker/
+# Output binary
+OUT?=$(BIN)Kernel.img
+ARGS?=
+# You can compile for the raspberry pi version 2 by specifying 'TARGET=rpi2' in the command line.
+# Otherwise, it defaults to rpi
+ARCH?=armv6
+TARGET?=rpi1
+MAKER?=java -jar $(JBIN)maker.jar $(JFLAGS)
+
+JFLAGS=-arch $(ARCH) -targ $(TARGET) --src-asm $(ASRC) --src-java $(JSRC) --src-c++ $(CSRC) --src-ld $(LSRC) --bin-asm $(ABIN) --bin $(BIN) --bin-java $(JBIN) --bin-asm $(ABIN) -o $(OUT) $(ARGS)
 all:
-	$(MAKER) build check
+	$(MAKER) clean build check
 about:
 	$(MAKER) about
 
@@ -29,3 +45,8 @@ compile:
 
 link:
 	$(MAKER) link
+
+mount:
+	rm /Volumes/BOOT/Kernel.img
+	cp $(OUT) /Volumes/BOOT/Kernel.img
+	diskutil eject /dev/disk2

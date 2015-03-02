@@ -8,9 +8,8 @@
 #ifndef STD_UTIL_COLLECTION_HPP_
 #define STD_UTIL_COLLECTION_HPP_
 
-#include "../../std/stddef.h"
-#include "../../std/util/Iterator.hpp"
-#include "../lang/Object.hpp"
+#include <x-stddef.h>
+#include "Iterator.hpp"
 
 template<class T>
 class Collection: public Object {

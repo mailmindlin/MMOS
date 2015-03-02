@@ -8,6 +8,7 @@
 #ifndef STD_EXCEPTIONS_OUTOFMEMORYEXCEPTION_H_
 #define STD_EXCEPTIONS_OUTOFMEMORYEXCEPTION_H_
 
+#include "../lang/Object.cpp"
 #include "Exception.h"
 
 #if (!defined(EXC)) || (!defined(EXT))

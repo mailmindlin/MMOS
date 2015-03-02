@@ -5,12 +5,13 @@
  *      Author: wfeehery17
  */
 
-#ifndef STD_UTIL_STRINGBUFFER_H_
-#define STD_UTIL_STRINGBUFFER_H_
+#ifndef STD_UTIL_STRINGBUFFER_HPP_
+#define STD_UTIL_STRINGBUFFER_HPP_
 
-#include "../../std/lang/String.hpp"
-#include "../../std/stddef.h"
-#include "../../std/util/LinkedList.hpp"
+#include <x-stddef.h>
+
+#include "../lang/String.hpp"
+#include "LinkedList.hpp"
 
 class StringBuffer: public Object {
 public:
@@ -20,7 +21,7 @@ public:
 	String& toString();
 	void append(String& str);
 	void append(const char* str);
-	void append(String* s);
+	void append(String& s);
 	const char* toCharArray();
 	StringBuffer& operator<<(String& str);
 	StringBuffer& operator<<(const char* c);
@@ -33,4 +34,4 @@ protected:
 	LinkedList<String> * buff;
 };
 
-#endif /* STD_UTIL_STRINGBUFFER_H_ */
+#endif /* STD_UTIL_STRINGBUFFER_HPP_ */

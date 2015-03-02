@@ -5,15 +5,17 @@
  *      Author: wfeehery17
  */
 
-#include "../../std/lang/String.hpp"
+#include "String.hpp"
 
-#include "../../std/algorithm.h"
-#include "../../std/lang/Double.hpp"
-#include "../../std/lang/Integer.hpp"
-#include "../../std/lang/Long.hpp"
-#include "../../std/limits.h"
-#include "../../std/memory.h"
-#include "../../std/strlen.h"
+#include "../algorithm.h"
+#include "../limits.h"
+#include "../memory.h"
+#include "../strlen.h"
+#include "Double.hpp"
+#include "Integer.hpp"
+#include "Long.hpp"
+#include "Object.hpp"//NOTE: *NOT* Object.cpp, or you won't be able to compile this
+#include "../Math.h"
 
 const size_t String::size;
 String::String(const String& str) :
@@ -52,12 +54,6 @@ String::String(size_t n, char c) :
 		data[i] = c;
 }
 
-String::String(String&& str) :
-		size(str.length) {
-	expand();
-	for (int i = 0; i < str.length(); i++)
-		data[i] = str.data[i];
-}
 String::String(size_t length) :
 		size(length) {
 	expand();
@@ -79,15 +75,6 @@ String& String::operator =(const char* s) {
 
 String& String::operator =(char c) {
 	String * result = new String(1, c);
-	delete this;
-	return result;
-}
-
-String& String::operator =(String&& str) {
-	//prevent self assignment problems
-	if (str == this)
-		return this;
-	String * result = new String(str);
 	delete this;
 	return result;
 }
@@ -228,7 +215,7 @@ size_t String::lastIndexOf(String& str) {
 }
 
 size_t String::lastIndexOf(String& str, size_t fromIndex) {
-	for (size_t i = std::min(fromIndex, length() - str.length()); i > 0; i--) {
+	for (size_t i = Math::min(fromIndex, length() - str.length()); i > 0; i--) {
 		bool match = true;
 		for (size_t j = 0; match && j < str.length(); j++)
 			match = (data[i + j] == str.data[j]) && match;
@@ -368,7 +355,7 @@ String& String::valueOf(double d) {
 }
 
 String& String::valueOf(float f) {
-	return NULL; //TODO finish
+	return &nullptr; //TODO finish
 }
 
 String& String::valueOf(int i, size_t radix) {

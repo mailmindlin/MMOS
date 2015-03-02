@@ -5,7 +5,8 @@
  *      Author: wfeehery17
  */
 
-#include "../../std/util/NodeIterator.hpp"
+#include "NodeIterator.hpp"
+
 template<typename T>
 NodeIterator<T>::NodeIterator(Node<T>* first) {
 	count = 0;

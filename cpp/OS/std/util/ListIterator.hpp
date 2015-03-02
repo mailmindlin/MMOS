@@ -8,8 +8,8 @@
 #ifndef STD_UTIL_LISTITERATOR_HPP_
 #define STD_UTIL_LISTITERATOR_HPP_
 
-#include "../../std/stddef.h"
-#include "../../std/util/Iterator.hpp"
+#include <x-stddef.h>
+#include "Iterator.hpp"
 
 template<typename T>
 class ListIterator: public Iterator<T> {

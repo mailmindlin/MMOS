@@ -35,12 +35,11 @@ _start:
 	blo 1b
  
 	// Call kernel_main
-	ldr r3, =kernel_main
-	blx r3
-	//now call exit
- 	ldr r3, =_exit
- 	blx r3
-	// halt
+//	STR lr, [sp, #-4]!
+	BL kernel_main
+	//now call _exit, because we are done.
+	BL _exit
+	// halt, if exit terminated for some reason
 halt:
 	wfe
 	b halt

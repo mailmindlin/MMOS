@@ -61,6 +61,9 @@ public class Executor {
 			for (Entry<Object, Object> prop : (System.getProperties().entrySet())) {
 				System.out.println(prop.getKey() + ": " + prop.getValue());
 			}
+			System.out.println();
+			System.out.println("Options:");
+			props.forEach((k,v)->System.out.println(k+StrUtils.ofLength(' ', 20-k.length())+v.toString()));
 		} else if (command.equals("clean"))
 			return clean(props);
 		else if (command.equals("compileASM"))
@@ -84,7 +87,7 @@ public class Executor {
 		JSONArray libraries = props.<JSONArray> getAs("libraries");
 		{
 			Path memset = makePath(props.getPath("bin.asm"), "memset.o");
-			if (assemble(compiler, makePath(props.getPath("src.asm"), "memset.s"), memset))
+			if (assemble(compiler, makePath(props.getPath("src.asm"), "memset.s"), memset,props.getBool("verbose")))
 				if (!libraries.contains(memset))
 					libraries.put(memset);
 				else {
@@ -94,7 +97,7 @@ public class Executor {
 		}
 		{
 			Path memcpy = makePath(props.getPath("bin.asm"), "memcpy.o");
-			if (assemble(compiler, makePath(props.getPath("src.asm"), "memcpy.s"), memcpy))
+			if (assemble(compiler, makePath(props.getPath("src.asm"), "memcpy.s"), memcpy,props.getBool("verbose")))
 				if (!libraries.contains(memcpy))
 					libraries.put(memcpy);
 				else {
@@ -111,11 +114,12 @@ public class Executor {
 		boolean success = true;
 		success = success | runTask(props, compiler, "compileASM");
 		JSONArray libraries = props.<JSONArray> getAs("libraries");
+		/**/
 		{
 			Path stdLib = makePath(props.getPath("bin.cpp"), "libstd.a");
 			if (compileLibrary(compiler, "std",
 					makePath(props.getPath("src.cpp"), "std", "stdlib.cpp"),
-					makePath(props.getPath("bin.cpp"), "stdlib.o"), stdLib, new Path[] {}))
+					makePath(props.getPath("bin.cpp"), "stdlib.o"), stdLib, new Path[] {},props.getBool("verbose")))
 				if (!libraries.contains(stdLib))
 					libraries.put(stdLib);
 				else {
@@ -128,7 +132,7 @@ public class Executor {
 			Path newLib = makePath(props.getPath("bin.cpp"), "newlib.o");
 			if (compileCLibrary(compiler, "newlib",
 					makePath(props.getPath("src.cpp"), "newlib", "newlib.c"),
-					makePath(props.getPath("bin.cpp"), "newlib.o"), newLib, new Path[] {}))
+					makePath(props.getPath("bin.cpp"), "newlib.o"), newLib, new Path[] {},props.getBool("verbose")))
 				if (!libraries.contains(newLib))
 					libraries.put(newLib);
 				else {
@@ -138,7 +142,7 @@ public class Executor {
 		}/**/
 		{
 			Path bootloader = makePath(props.getPath("bin.asm"), "bootloader.o");
-			if (assemble(compiler, makePath(props.getPath("src.asm"), "start.s"), bootloader))
+			if (assemble(compiler, makePath(props.getPath("src.asm"), "start.s"), bootloader,props.getBool("verbose")))
 				if (!libraries.contains(bootloader))
 					libraries.put(bootloader);
 				else {
@@ -152,18 +156,32 @@ public class Executor {
 	public static boolean link(Properties props, Compiler compiler) {
 		// compile kernel (ELF)
 		Path elf = props.getPath("bin.elf");
-		CCompiler<?> cc = compiler.CC().enableStatistics(true).setLanguage("gnu++11")
-				.addTarget(makePath(props.getPath("src.cpp"), "Kernel.cpp")).setOutput(elf)
-				.includeDir(props.getPath("bin.cpp")).includeDir(props.getPath("bin.asm")).flag("fPIC")
-				.flag("Wall").flag("ffreestanding").flag("fno-rtti").flag("Wextra")
-				.flag("nostartfiles").flag("fexceptions")
-				.setLinkerScript(makePath(props.getPath("src.ld"), "rpi.ld"))
-				.ldFlag("-Map", props.getPath("bin.map").toString()).ldFlag("-nostdlib")
-				.ldFlag("-static")
-				// .ldFlag("--verbose")
-				.ldFlag("--gc-sections")
+		CCompiler<?> cc = compiler.CC()
+			.enableStatistics(true)
+			.setLanguage("gnu++11")
+			.define("__REALCOMP__")
+			.addTarget(makePath(props.getPath("src.cpp"), "Kernel.cpp"))
+			.setOutput(elf)
+			.includeDir(props.getPath("bin.cpp"))
+			.includeDir(props.getPath("bin.asm"))
+			.flag("fPIC")
+			.flag("Wall")
+			.flag("ffreestanding")
+			.flag("fno-rtti")
+			.flag("Wextra")
+			.flag("nostartfiles")
+			.flag("fexceptions")
+			.setLinkerScript(makePath(props.getPath("src.ld"), "rpi.ld"))
+			.ldFlag("-Map", props.getPath("bin.map").toString())
+			.ldFlag("-static")
+			.ldFlag("--gc-sections")
 		// .ldFlag("--no-undefined")
 		;
+		if(props.getBool("verbose")) {
+			cc.flag("v")
+				.ldFlag("--verbose")
+			;
+		}
 
 		props.<JSONArray> getAs("libraries").forEach((l) -> (cc.addTarget((Path) l)));
 		if (!cc.execute())
@@ -177,26 +195,41 @@ public class Executor {
 		return false;
 	}
 
-	protected static boolean assemble(Compiler compiler, Path input, Path output) {
+	protected static boolean assemble(Compiler compiler, Path input, Path output,boolean verbose) {
 		System.out.println("Assembling: " + output.toFile().getName());
 		Assembler<?> assembler = compiler.AS();
-		boolean success = assembler.addTarget(input).setOutput(output).flag("fpic")
-		// .flag("c")
-				.execute();
-		return success;
+		assembler.addTarget(input).setOutput(output)
+		.flag("fpic")
+		.define("__REALCOMP__")
+		;
+		if(verbose) {
+			assembler.flag("v");
+		}
+		return assembler.execute();
 	}
 
 	protected static boolean compileLibrary(Compiler compiler, String name, Path input, Path temp,
-			Path output, Path[] includes) {
+			Path output, Path[] includes, boolean verbose) {
 		System.out.println("Compiling library: " + name);
-		CCompiler<?> cc = compiler.CC().define("__LIB_" + name).addTarget(input).setOutput(temp)
-				.setLanguage("gnu++11").showWarnings(true).flag("ffreestanding").flag("fno-rtti")
-				.flag("fPIC").flag("Wextra").flag("nostartfiles").flag("fexceptions").flag("static")
-				.flag("Wunused-parameter")
-				// .flag("v")
-				.link(false);
+		CCompiler<?> cc = compiler.CC()
+			.define("__LIB_" + name)
+			.define("__REALCOMP__")
+			.addTarget(input)
+			.setOutput(temp)
+			.setLanguage("gnu++11")
+			.showWarnings(true)
+			.flag("ffreestanding")//b/c library
+			.flag("fPIC")//b/c library
+			.flag("Wextra")//it's an OS, so you probably want to know about *every* warning
+			.flag("nostartfiles")//because it's a library
+			.flag("fexceptions")//I use exceptions, so allow it
+			.flag("static")//static library (custom OS, so no custom libraries
+			.link(false);
 		for (Path include : includes)
 			cc.addTarget(include);
+		if(verbose) {
+			cc.flag("v").ldFlag("--verbose");
+		}
 		boolean success = cc.execute();
 		if (!success)
 			return false;
@@ -205,17 +238,28 @@ public class Executor {
 	}
 
 	protected static boolean compileCLibrary(Compiler compiler, String name, Path input, Path temp,
-			Path output, Path[] includes) {
+			Path output, Path[] includes, boolean verbose) {
 		System.out.println("Compiling library: " + name);
-		CCompiler<?> cc = compiler.CC("C").define("__LIB_" + name).addTarget(input).setOutput(temp)
-				.setLanguage("c11")
-				// .showWarnings(true)
-				.flag("ffreestanding").flag("fPIC").flag("Wextra").flag("nostartfiles")
-				.flag("fexceptions").flag("static")
-				// .flag("v")
-				.suppressWarnings(true).link(false);
+		CCompiler<?> cc = compiler.CC("C")//get C compiler
+			.define("__LIB_" + name)
+			.define("__REALCOMP__")
+			.addTarget(input)
+			.setOutput(temp)
+			.setLanguage("c11")
+			// .showWarnings(true)
+			.flag("ffreestanding")
+			.flag("fPIC")
+			.flag("Wextra")
+			.flag("nostartfiles")//b/c library
+			.flag("fexceptions")
+			.flag("static")
+			.suppressWarnings(true)//it got annoying after a while. Feel free to change this.
+			.link(false);
 		for (Path include : includes)
 			cc.addTarget(include);
+		if(verbose) {
+			cc.flag("v").ldFlag("--verbose");
+		}
 		boolean success = cc.execute();
 		if (!success)
 			return false;
@@ -223,5 +267,17 @@ public class Executor {
 		 * success=compiler.AR() .setOutput(output) .addTarget(temp) .execute();
 		 */
 		return success;
+	}
+	/**
+	 * Display a file size in a human-readable format. (i.e., 1048576 -> "1MB")
+	 * @param size size in bytes
+	 * @return human-readable string
+	 */
+	protected static String fileSize(long size) {
+		String[] sizes={"B","KB","MB","GB","TB"};
+		int order = (int)Math.floor(Math.log(size)/Math.log(1024));
+		if(order==0)
+			return String.format("%d %s", size,sizes[order]);
+		return String.format("%.5g %s", size/Math.pow(1024, order),sizes[order]);
 	}
 }

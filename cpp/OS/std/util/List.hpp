@@ -8,9 +8,9 @@
 #ifndef STDLIB_LIST_HPP_
 #define STDLIB_LIST_HPP_
 
-#include "../../std/stddef.h"
-#include "../../std/util/Collection.hpp"
-#include "../../std/util/ListIterator.hpp"
+#include <x-stddef.h>
+#include "Collection.hpp"
+#include "ListIterator.hpp"
 
 template<class T>
 class List: public Collection<T> {

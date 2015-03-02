@@ -5,11 +5,9 @@
  *      Author: wfeehery17
  */
 
-#include "../../std/util/StringBuffer.h"
-
-#include "../../std/util/Collection.hpp"
-#include "../../std/util/Iterator.hpp"
-#include "../memory.h"
+#include "StringBuffer.hpp"
+#include <memory.h>
+#include "Iterator.hpp"
 
 LinkedList<String> * StringBuffer::buff;
 StringBuffer::StringBuffer() {
@@ -52,13 +50,13 @@ StringBuffer& StringBuffer::operator <<(bool b) {
 }
 
 void StringBuffer::append(String& str) {
-	buff->addLast(&str);
+	buff->addLast(str);
 }
 
 void StringBuffer::append(const char* c) {
-	buff->addLast(new String(c));
+	buff->addLast(*new String(c));
 }
-void StringBuffer::append(String* s) {
+void StringBuffer::append(String& s) {
 	buff->addLast(s);
 }
 
@@ -89,5 +87,4 @@ const char* StringBuffer::toCharArray() {
 	const char* result = tmp.toCharArray();
 	delete tmp;
 	return result;
-}
 }

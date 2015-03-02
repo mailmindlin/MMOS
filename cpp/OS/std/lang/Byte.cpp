@@ -5,12 +5,7 @@
  *      Author: wfeehery17
  */
 
-#include "../../std/lang/Byte.hpp"
-
-Byte::Byte() {
-	// TODO Auto-generated constructor stub
-
-}
+#include "Byte.hpp"
 
 Byte::~Byte() {
 	// TODO Auto-generated destructor stub

@@ -9,7 +9,7 @@
 #define STD_LANG_CHARACTER_HPP_
 
 #include "../../std/lang/Object.hpp"
-#include "../../std/stdint.h"
+#include <x-stdint.h>
 
 class Character: public Object {
 public:

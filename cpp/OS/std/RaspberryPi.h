@@ -10,15 +10,22 @@
 #ifndef EXC
 #define EXC
 #endif
-
+#ifndef __RPI_MODEL
+#define __RPI_MODEL MODEL_B
+#if __REALCOMP__
+#warning "No raspberry pi model given, defaulting to model B";
+#endif
+#endif
 EXC class RaspberryPi {
 public:
 	static int getRevision() {
-		return MODEL_B;
+		return __RPI_MODEL;
 	}
-	static const int MODEL_A = 1;
-	static const int MODEL_B = 2;
-	static const int MODEL_2 = 3;
+	static const int MODEL_A		= 1;
+	static const int MODEL_B		= 2;
+	static const int MODEL_A_PLUS	= 3;
+	static const int MODEL_B_PLUS	= 4;
+	static const int MODEL_B_2 = 3;
 	static const int MODEL_CM = 4;
 };
 

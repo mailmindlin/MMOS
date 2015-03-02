@@ -7,8 +7,8 @@
  *      Author: wfeehery17
  */
 
-#include "../std/stddef.h"
-#include "../std/stdint.h"
+#include <x-stddef.h>
+#include <x-stdint.h>
 
 class Terminal {
 public:

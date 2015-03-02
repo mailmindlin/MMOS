@@ -22,7 +22,7 @@
 #include "memory.h"
 #include "RaspberryPi.h"
 #include "stdasm.h"
-#include "stddef.h"
+#include "x-stddef.h"
 #include "strlen.h"
 #include "Time.cpp"
 #include "exceptions/ArrayIndexOutOfBoundsException.h"

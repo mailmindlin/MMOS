@@ -28,6 +28,9 @@
 /*
  * ISO C Standard:  7.17  Common definitions  <stddef.h>
  */
+#ifdef __REALCOMP__
+#include <stddef.h>
+#else
 #if (!defined(_STDDEF_H) && !defined(_STDDEF_H_) && !defined(_ANSI_STDDEF_H) \
      && !defined(__STDDEF_H__)) \
     || defined(__need_wchar_t) || defined(__need_size_t) \
@@ -416,3 +419,4 @@ typedef __WINT_TYPE__ wint_t;
 
 #endif /* !_STDDEF_H && !_STDDEF_H_ && !_ANSI_STDDEF_H && !__STDDEF_H__
           || __need_XXX was not defined before */
+#endif

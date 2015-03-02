@@ -8,7 +8,7 @@
 #ifndef STD_LANG_SHORT_HPP_
 #define STD_LANG_SHORT_HPP_
 
-#include "../../std/lang/Number.hpp"
+#include "Number.hpp"
 
 class Short: public Number, public Comparable {
 public:

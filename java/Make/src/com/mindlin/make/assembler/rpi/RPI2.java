@@ -22,7 +22,9 @@ public class RPI2 implements Compiler {
 
 	@Override
 	public boolean accept(Properties props) {
-		return props.getOrDefault("target", "n/a").equals("rpi2") || props.getString("target.arch").equalsIgnoreCase("armv7");
+		if(props.containsKey("target"))
+			return props.getString("target").equalsIgnoreCase("rpi2");
+		return props.getString("target.arch").equalsIgnoreCase("armv7");
 	}
 
 	@Override
@@ -31,6 +33,7 @@ public class RPI2 implements Compiler {
 			.setCPU(CPU_NAME)
 			.setFPU(FPU_NAME)
 			.setArchitecture(ARCHITECTURE)
+			.define("__RPI_REVISION","MODEL_B_2")
 			.ldFlag("-nostdlib");
 	}
 	@Override
@@ -42,6 +45,7 @@ public class RPI2 implements Compiler {
 				.setCPU(CPU_NAME)
 				.setFPU(FPU_NAME)
 				.setArchitecture(ARCHITECTURE)
+				.define("__RPI_REVISION","MODEL_B_2")
 				.ldFlag("-nostdlib");
 	}
 
@@ -65,6 +69,7 @@ public class RPI2 implements Compiler {
 		return new ARM_EABI_Assembler(ARMGNU)
 			.setCPU(CPU_NAME)
 			.setFPU(FPU_NAME)
+			.define("__RPI_REVISION","MODEL_B_2")
 			.setArchitecture(ARCHITECTURE);
 	}
 

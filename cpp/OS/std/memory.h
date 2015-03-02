@@ -7,9 +7,10 @@
 
 #ifndef STD_MEMORY_H_
 #define STD_MEMORY_H_
+
 #pragma GCC diagnostic ignored "-Wpointer-arith"
 #include "../std/memcpy.h"
-#include "../std/stddef.h"
+#include <x-stddef.h>
 #if (!defined(EXC)) || (!defined(EXT))
 #define EXC
 #define EXT

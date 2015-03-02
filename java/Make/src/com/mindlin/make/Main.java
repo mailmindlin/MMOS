@@ -72,7 +72,7 @@ public class Main {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-		properties.addInference("TARCH", "armv6")
+		properties
 			.addInference("out",new File(bin, "kernel.img"))
 			.addInference("bin",bin)
 			.addInference("bin.asm",SymlinkResolver.resolve(new File(bin, "asm").getAbsoluteFile()))
@@ -82,12 +82,10 @@ public class Main {
 			.addInference("src.ld",SymlinkResolver.resolve(new File("linker").getAbsoluteFile()))
 			.addInference("src.cpp", SymlinkResolver.resolve(new File("cpp/OS").getAbsoluteFile()))
 			.addInference("src.java", SymlinkResolver.resolve(new File("java").getAbsoluteFile()))
-			.addInference("kernel", SymlinkResolver.resolve(new File("output/kernel").getAbsoluteFile()))
 			.addInference("bin.listing", new File(bin,"kernel.list"))
 			.addInference("bin.elf", new File(bin,"kernel.elf"))
 			.addInference("bin.map", new File(bin,"kernel.map"))
-			.addInference("target.arch","armv6")
-			.addInference("target","rpi1")
+			.addInference("target.arch","armv6")//will default to RPIv1
 			.addInference("CYGWIN",false)
 			.addInference("CARCH",SystemProperty.OS_ARCH.get("x86_64"))
 			.addInference("COS",SystemProperty.OS_NAME.get("Windows"))

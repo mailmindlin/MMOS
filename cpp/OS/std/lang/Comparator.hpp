@@ -8,7 +8,7 @@
 #ifndef STD_LANG_COMPARATOR_HPP_
 #define STD_LANG_COMPARATOR_HPP_
 
-#include "../../std/lang/Object.hpp"
+#include "Object.cpp"
 
 template<class T>
 class Comparable: Object {

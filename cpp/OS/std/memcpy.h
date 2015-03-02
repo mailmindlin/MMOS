@@ -8,7 +8,7 @@
 #ifndef STD_MEMCPY_H_
 #define STD_MEMCPY_H_
 
-#include "../std/stddef.h"
+#include <x-stddef.h>
 
 extern void memcpy(void *dest, const void *source, size_t count);
 extern void *memset(void *dest, int c, size_t count);

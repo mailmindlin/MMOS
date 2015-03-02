@@ -5,7 +5,7 @@
  *      Author: wfeehery17
  */
 
-#include "../../std/lang/Character.hpp"
+#include "Character.hpp"
 
 Character::Character() {
 	// TODO Auto-generated constructor stub

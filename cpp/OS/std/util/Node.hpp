@@ -8,22 +8,22 @@
 #ifndef NODE_H_
 #define NODE_H_
 
-#include "../../std/stddef.h"
+#include <x-stddef.h>
 
 template<typename T>
 class Node {
 public:
-	Node(T* o):prev(nullptr),v(o),next(nullptr) {
+	Node(T& o):prev(nullptr),v(o),next(nullptr) {
 	}
 	Node(Node<T>* prev, T* o):prev(prev),v(o),next(nullptr) {
 		if (prev != nullptr)
 			prev->next = this;
 	}
-	Node(T* o, Node<T>* next):v(o),next(next),prev(nullptr) {
+	Node(T& o, Node<T>* next):v(o),next(next),prev(nullptr) {
 		if (next != nullptr)
 			next->prev = this;
 	}
-	Node(Node<T>* prev, T* o, Node<T>* next):v(o),next(next),prev(prev) {
+	Node(Node<T>* prev, T& o, Node<T>* next):v(o),next(next),prev(prev) {
 		if (prev != nullptr)
 			prev->next = this;
 		if (next != nullptr)
@@ -35,10 +35,10 @@ public:
 	Node<T>* getPrev(){
 		return prev;
 	}
-	T* getData(){
+	T& getData(){
 		return v;
 	}
-	T* v;
+	T& v;
 	Node<T>* prev;
 	Node<T>* next;
 };

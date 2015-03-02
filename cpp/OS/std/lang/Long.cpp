@@ -5,14 +5,14 @@
  *      Author: wfeehery17
  */
 
-#include "../../std/lang/Long.hpp"
+#include "Long.hpp"
 
-#include "../../std/exceptions/NumberFormatException.h"
-#include "../../std/lang/Byte.hpp"
-#include "../../std/lang/Character.hpp"
-#include "../../std/lang/Integer.hpp"
-#include "../../std/lang/Object.hpp"
-#include "../../std/lang/Short.hpp"
+#include "../exceptions/NumberFormatException.h"
+#include "Byte.hpp"
+#include "Character.hpp"
+#include "Integer.hpp"
+#include "Object.hpp"
+#include "Short.hpp"
 
 Long::Long(long l) :
 		value(l) {

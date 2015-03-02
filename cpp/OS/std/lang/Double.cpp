@@ -5,7 +5,7 @@
  *      Author: wfeehery17
  */
 
-#include "../../std/lang/Double.hpp"
+#include "Double.hpp"
 
 Double::Double() {
 	// TODO Auto-generated constructor stub

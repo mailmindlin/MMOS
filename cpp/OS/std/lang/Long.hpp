@@ -8,11 +8,11 @@
 #ifndef STD_LANG_LONG_HPP_
 #define STD_LANG_LONG_HPP_
 
-#include "../../std/lang/Comparator.hpp"
-#include "../../std/lang/Number.hpp"
-#include "../../std/lang/String.hpp"
-#include "../../std/stddef.h"
-#include "../../std/stdint.h"
+#include <x-stddef.h>
+#include <x-stdint.h>
+#include "Comparator.hpp"
+#include "Number.hpp"
+#include "String.hpp"
 
 class Long: Number, Comparable<Long> {
 public:

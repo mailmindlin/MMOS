@@ -1,3 +1,4 @@
+
 /*
  * String.h
  *
@@ -8,11 +9,10 @@
 #ifndef STDLIB_STRING_HPP_
 #define STDLIB_STRING_HPP_
 
-#include "../../std/stddef.h"
+#include <x-stddef.h>
+#include "Object.hpp"
 
-class Object;
-
-class String {
+class String : Object {
 public:
 	String(const String& str);
 	String(const String& str, size_t pos, size_t len = npos);
@@ -90,22 +90,22 @@ public:
 	String& substring(size_t beginIndex);
 	String& substring(size_t beginIndex, size_t endIndex);
 	char* toCharArray() const;
-	String* toLowerCase() const;
+	String& toLowerCase() const;
 	String& toString() const;
-	String* toUpperCase() const;
-	String* trim() const;
-	static String* valueOf(bool b);
-	static String* valueOf(char c);
-	static String* valueOf(const char* c);
-	static String* valueOf(char* data, size_t offset, size_t count);
-	static String* valueOf(double d);
-	static String* valueOf(double d, size_t radix);
-	static String* valueOf(float f);
-	static String* valueOf(int i, size_t radix);
-	static String* valueOf(long l);
-	static String* valueOf(long l, size_t radix);
-	static String* valueOf(Object& obj);
-	static String* valueOfPtr(void* ptr);
+	String& toUpperCase() const;
+	String& trim() const;
+	static String& valueOf(bool b);
+	static String& valueOf(char c);
+	static String& valueOf(const char* c);
+	static String& valueOf(char* data, size_t offset, size_t count);
+	static String& valueOf(double d);
+	static String& valueOf(double d, size_t radix);
+	static String& valueOf(float f);
+	static String& valueOf(int i, size_t radix);
+	static String& valueOf(long l);
+	static String& valueOf(long l, size_t radix);
+	static String& valueOf(Object& obj);
+	static String& valueOfPtr(void* ptr);
 protected:
 	String(size_t length);
 	void expand();

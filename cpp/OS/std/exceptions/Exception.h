@@ -8,8 +8,9 @@
 #ifndef STD_EXCEPTIONS_EXCEPTION_H_
 #define STD_EXCEPTIONS_EXCEPTION_H_
 
-#include "../lang/Object.hpp"
+#include "../lang/Object.cpp"
 #include "../lang/String.hpp"
+
 #if (!defined(EXC)) || (!defined(EXT))
 #define EXC
 #define EXT

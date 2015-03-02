@@ -8,6 +8,9 @@
 #ifndef IO_BSC_I2CDEVICE_H_
 #define IO_BSC_I2CDEVICE_H_
 
+#include <x-stddef.h>
+#include <x-stdint.h>
+
 class I2CDevice {
 	friend class BSC;
 public:

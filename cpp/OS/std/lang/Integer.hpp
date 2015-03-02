@@ -8,10 +8,10 @@
 #ifndef STD_LANG_INTEGER_HPP_
 #define STD_LANG_INTEGER_HPP_
 
-#include "../../std/lang/Number.hpp"
-#include "../../std/lang/String.hpp"
-#include "../../std/stddef.h"
-#include "../../std/stdint.h"
+#include <x-stddef.h>
+#include <x-stdint.h>
+#include "Number.hpp"
+#include "String.hpp"
 
 class String;
 

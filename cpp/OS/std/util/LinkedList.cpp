@@ -5,13 +5,10 @@
  *      Author: wfeehery17
  */
 
-#include "../../std/util/LinkedList.hpp"
+#include "LinkedList.hpp"
 
-#include "../../std/exceptions/ArrayIndexOutOfBoundsException.h"
-#include "../../std/util/Iterator.hpp"
-#include "../../std/util/List.hpp"
-#include "../../std/util/ListIterator.hpp"
-#include "../../std/util/NodeIterator.cpp"
+#include "../exceptions/ArrayIndexOutOfBoundsException.h"
+#include "NodeIterator.hpp"
 
 template<typename T>
 LinkedList<T>::LinkedList() {
@@ -27,7 +24,7 @@ LinkedList<T>::LinkedList(Collection<T>* c) {
 }
 
 template<typename T>
-void LinkedList<T>::addFirst(T* o) {
+void LinkedList<T>::addFirst(T& o) {
 	Node<T>* tmp = first;
 	if (tmp != nullptr)
 		first = new Node<T>(o);
@@ -36,7 +33,7 @@ void LinkedList<T>::addFirst(T* o) {
 }
 
 template<class T>
-void LinkedList<T>::addLast(T* o) {
+void LinkedList<T>::addLast(T& o) {
 	Node<T>* tmp = last;
 	if(last==nullptr)
 		last = new Node<T>(o);

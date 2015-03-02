@@ -8,9 +8,10 @@
 #ifndef STD_LANG_NUMBER_HPP_
 #define STD_LANG_NUMBER_HPP_
 
-#include "../../std/lang/Comparator.hpp"
-#include "../../std/stddef.h"
-#include "../stdint.h"
+#include <x-stddef.h>
+#include <x-stdint.h>
+#include "Comparator.hpp"
+#include "Object.cpp"
 
 class Number: public Object, Comparable<Number> {
 public:

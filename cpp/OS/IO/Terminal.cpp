@@ -7,7 +7,7 @@
 
 #include "Terminal.h"
 
-#include "../stdlib/strlen.h"
+#include "../std/strlen.h"
 #include "VGAColor.h"
 
 static const size_t VGA_WIDTH = 80;

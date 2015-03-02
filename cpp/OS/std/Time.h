@@ -8,7 +8,7 @@
 #ifndef STD_TIME_H_
 #define STD_TIME_H_
 
-#include "../std/stdint.h"
+#include <x-stdint.h>
 #if (!defined(EXC)) || (!defined(EXT))
 #define EXC
 #define EXT
