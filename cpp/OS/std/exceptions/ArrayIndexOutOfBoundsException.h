@@ -8,7 +8,6 @@
 #ifndef STD_EXCEPTIONS_ARRAYINDEXOUTOFBOUNDSEXCEPTION_H_
 #define STD_EXCEPTIONS_ARRAYINDEXOUTOFBOUNDSEXCEPTION_H_
 
-#include "../lang/Object.cpp"
 #include "Exception.h"
 
 #if (!defined(EXC)) || (!defined(EXT))

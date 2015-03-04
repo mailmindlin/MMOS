@@ -8,7 +8,7 @@
 #ifndef STDLIB_OBJECT_HPP_
 #define STDLIB_OBJECT_HPP_
 
-#include <x-stdint.h>
+#include "../x-stdint.h"
 
 #if (!defined(EXC)) || (!defined(EXT))
 #define EXC

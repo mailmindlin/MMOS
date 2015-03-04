@@ -9,7 +9,7 @@
 #ifndef STDLIB_STRING_HPP_
 #define STDLIB_STRING_HPP_
 
-#include <x-stddef.h>
+#include "../x-stddef.h"
 #include "Object.hpp"
 
 class String : Object {
@@ -105,7 +105,7 @@ public:
 	static String& valueOf(long l);
 	static String& valueOf(long l, size_t radix);
 	static String& valueOf(Object& obj);
-	static String& valueOfPtr(void* ptr);
+	static String& valueOfPtr(const void* ptr);
 protected:
 	String(size_t length);
 	void expand();

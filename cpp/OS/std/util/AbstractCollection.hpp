@@ -8,10 +8,9 @@
 #ifndef STD_UTIL_ABSTRACTCOLLECTION_HPP_
 #define STD_UTIL_ABSTRACTCOLLECTION_HPP_
 
-#include <x-stddef.h>
-
 #include "../exceptions/OutOfMemoryException.h"
 #include "../limits.h"
+#include "../x-stddef.h"
 #include "Collection.hpp"
 #include "Iterator.hpp"
 

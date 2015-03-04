@@ -7,15 +7,19 @@
 
 #include "Kernel.h"
 
+#include "IO/Display/framebuffer.h"
+#include "std/x-stdint.h"
+
 
 #define swapuint(a,b) {uint64_t tmp=a;a=b;b=tmp;}
 unsigned long frameCnt=0;
 void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags) {
-//void kernel_main() {
-//	(void) r0;
-//	(void) r1;
-//	(void) atags;
-	render();
+	(void) r0;
+	(void) r1;
+	(void) atags;
+	//random example code. I'm still focused on the framework like OpenGL, filesystems, etc.
+	if(Display::GPU::initFrameBuffer(1024,768,16))
+		render();
 }
 extern "C++"
 void render() {

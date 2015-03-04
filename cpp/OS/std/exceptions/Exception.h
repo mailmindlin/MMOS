@@ -8,8 +8,8 @@
 #ifndef STD_EXCEPTIONS_EXCEPTION_H_
 #define STD_EXCEPTIONS_EXCEPTION_H_
 
-#include "../lang/Object.cpp"
 #include "../lang/String.hpp"
+#include "../lang/Object.hpp"
 
 #if (!defined(EXC)) || (!defined(EXT))
 #define EXC
@@ -20,8 +20,8 @@ public:
 	Exception(const char* msg) {
 		this->message = new String(msg);
 	}
-	String* toString() const{
-		return message;
+	String& toString() const{
+		return *message;
 	}
 	~Exception() {
 		delete message;

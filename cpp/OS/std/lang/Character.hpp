@@ -8,8 +8,8 @@
 #ifndef STD_LANG_CHARACTER_HPP_
 #define STD_LANG_CHARACTER_HPP_
 
-#include "../../std/lang/Object.hpp"
-#include <x-stdint.h>
+#include "../x-stdint.h"
+#include "Object.hpp"
 
 class Character: public Object {
 public:

@@ -5,9 +5,9 @@
  *      Author: wfeehery17
  */
 
-#include "../std/Time.h"
+#include "Time.h"
 
-#include <x-stdint.h>
+#include "stdasm.h"
 
 #define CLOCKS_PER_SEC 700000000;//clock runs @ ~700MHz
 namespace Time {

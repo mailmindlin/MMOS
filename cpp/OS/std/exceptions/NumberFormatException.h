@@ -7,16 +7,14 @@
 
 #ifndef STDLIB_EXCEPTIONS_NUMBERFORMATEXCEPTION_
 #define STDLIB_EXCEPTIONS_NUMBERFORMATEXCEPTION_
-
-#include "../lang/Object.cpp"
-#include "../lang/String.hpp"
-#include "../util/StringBuffer.hpp"
-#include "Exception.h"
-
 #if (!defined(EXC)) || (!defined(EXT))
 #define EXC
 #define EXT
 #endif
+#include "../lang/String.hpp"
+#include "../util/StringBuffer.hpp"
+#include "Exception.h"
+
 EXC class NumberFormatException: public Exception {
 public:
 	NumberFormatException(const char* c) :

@@ -8,6 +8,8 @@
 #ifndef STD_X_STDARG_H_
 #define STD_X_STDARG_H_
 
+#include "x-stdint.h"
+
 #ifdef __REALCOMP__
 #include <stdarg.h>
 #else

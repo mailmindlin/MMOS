@@ -23,30 +23,32 @@ ARGS?=
 # Otherwise, it defaults to rpi
 ARCH?=armv6
 TARGET?=rpi1
-MAKER?=java -jar $(JBIN)maker.jar $(JFLAGS)
-
+MAKER?=$(JBIN)Make.jar
 JFLAGS=-arch $(ARCH) -targ $(TARGET) --src-asm $(ASRC) --src-java $(JSRC) --src-c++ $(CSRC) --src-ld $(LSRC) --bin-asm $(ABIN) --bin $(BIN) --bin-java $(JBIN) --bin-asm $(ABIN) -o $(OUT) $(ARGS)
-all:
-	$(MAKER) clean build check
-about:
-	$(MAKER) about
+MK?=java -jar $(MAKER) $(JFLAGS)
+all: init
+	$(MK) clean build check
+about: init
+	$(MK) about
 
-build:
-	$(MAKER) build
+build: init
+	$(MK) build
 
-check:
-	$(MAKER) check
+check: init
+	$(MK) check
 
-clean:
-	$(MAKER) clean $(JFLAGS)
+clean: init
+	$(MK) clean $(JFLAGS)
 
-compile:
-	$(MAKER) compile
+compile: init
+	$(MK) compile
 
-link:
-	$(MAKER) link
+link: init
+	$(MK) link
 
-mount:
+mount: init
 	rm /Volumes/BOOT/Kernel.img
 	cp $(OUT) /Volumes/BOOT/Kernel.img
 	diskutil eject /dev/disk2
+
+init:

@@ -8,9 +8,8 @@
 #ifndef STD_UTIL_ITERATOR_HPP_
 #define STD_UTIL_ITERATOR_HPP_
 
-#include <x-stddef.h>
-
-#include "../lang/Object.cpp"
+#include "../lang/Object.hpp"
+#include "../x-stddef.h"
 
 template<class E>
 class Iterator : public Object {

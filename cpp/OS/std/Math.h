@@ -8,8 +8,11 @@
 #ifndef STD_MATH_H_
 #define STD_MATH_H_
 
-#include "lang/Object.cpp"
+#ifdef __REALCOMP__
+#include <cmath>
+#else
 
+#endif
 #if (!defined(EXC)) || (!defined(EXT))
 #define EXC
 #define EXT

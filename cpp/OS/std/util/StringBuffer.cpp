@@ -6,7 +6,8 @@
  */
 
 #include "StringBuffer.hpp"
-#include <memory.h>
+
+#include "../memory.h"
 #include "Iterator.hpp"
 
 LinkedList<String> * StringBuffer::buff;

@@ -8,8 +8,8 @@
 #ifndef IO_BSC_BSC_H_
 #define IO_BSC_BSC_H_
 
-#include <x-stddef.h>
-#include <x-stdint.h>
+#include "../../std/x-stddef.h"
+#include "../../std/x-stdint.h"
 #include "../MemAddr.hpp"
 
 class BSC {

@@ -4,45 +4,7 @@
  *  Created on: Feb 26, 2015
  *      Author: wfeehery17
  */
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <sys/fcntl.h>
-#include <sys/times.h>
-#include <sys/errno.h>
-#include <sys/time.h>
-#include <x-stdio.h>
-#include <x-stdint.h>
-#include <errno.h>
-#undef errno
-extern int errno;
-#ifndef EINVAL
-extern int EINVAL;
-#endif
-#ifndef S_IFCHR
-extern int S_IFCHR;
-#endif
-#ifdef __cplusplus
-extern "C" {
-#endif
-/*
-extern void _exit();
-extern int close(int file);
-extern char **environ; // pointer to array of char * strings that define the current environment variables
-extern int fstat(int file, struct stat *st);
-extern int getpid();
-extern int isatty(int file);
-extern int kill(int pid, int sig);
-extern int lseek(int file, int ptr, int dir);
-int read(int file, char *ptr, int len);
-caddr_t _sbrk(int incr);
-int write(int file, char *ptr, int len);*/
-#ifndef __REALCOMP__
-static struct stat{
-uint32_t st_mode;
-};
-static typedef char* caddr_t;//might actually be the real definition of caddr_t
-#endif
-extern typedef uint32_t file_t;
+#include "newlib.h"
 /**
  * Abort the OS
  */
@@ -157,6 +119,3 @@ extern int _write(file_t file, char *buffer, int len) {
 	}
 	return len;
 }
-#ifdef __cplusplus
-}
-#endif

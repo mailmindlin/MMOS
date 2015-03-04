@@ -14,8 +14,8 @@ import util.SymlinkResolver;
 import util.SystemProperty;
 
 public class Main {
-	public final static String OS_VERSION="experimental pre-alpha 0.0.23";
-	public final static String VERSION="alpha 0.1.3";
+	public final static String OS_VERSION="experimental alpha 0.0.25";
+	public final static String VERSION="alpha 0.1.5";
 	public final static Properties properties = new Properties();
 	static Compiler compiler;
 	public final static ArrayList<String> tasks = new ArrayList<String>();

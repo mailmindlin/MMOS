@@ -8,9 +8,11 @@
 #ifndef STD_MEMORY_H_
 #define STD_MEMORY_H_
 
-#pragma GCC diagnostic ignored "-Wpointer-arith"
+#pragma GCC diagnostic ignored "-Wpointer-arith"//because I do stuff with pointers in Array::copy
+
 #include "../std/memcpy.h"
-#include <x-stddef.h>
+#include "x-stddef.h"
+
 #if (!defined(EXC)) || (!defined(EXT))
 #define EXC
 #define EXT

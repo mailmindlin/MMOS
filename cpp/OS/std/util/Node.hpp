@@ -8,7 +8,6 @@
 #ifndef NODE_H_
 #define NODE_H_
 
-#include <x-stddef.h>
 
 template<typename T>
 class Node {

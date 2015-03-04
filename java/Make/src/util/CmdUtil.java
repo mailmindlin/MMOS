@@ -204,6 +204,8 @@ public class CmdUtil {
 				if(line==null)
 					continue;
 				os.println(prefix + line);
+				if(!line.endsWith("\n"))
+					os.println();
 			}
 			return this;
 		}
@@ -214,6 +216,8 @@ public class CmdUtil {
 				if(line==null)
 					continue;
 				os.println(prefix + line);
+				if(!line.endsWith("\n"))
+					os.println();
 			}
 			return this;
 		}

@@ -10,12 +10,11 @@
 #include "../algorithm.h"
 #include "../limits.h"
 #include "../memory.h"
+#include "../Math.h"
 #include "../strlen.h"
 #include "Double.hpp"
 #include "Integer.hpp"
 #include "Long.hpp"
-#include "Object.hpp"//NOTE: *NOT* Object.cpp, or you won't be able to compile this
-#include "../Math.h"
 
 const size_t String::size;
 String::String(const String& str) :

@@ -8,7 +8,7 @@
 #ifndef STD_LANG_BYTE_HPP_
 #define STD_LANG_BYTE_HPP_
 
-#include <x-stdint.h>
+#include "../x-stdint.h"
 #include "Number.hpp"
 
 class Byte: public Number, public Comparable {
