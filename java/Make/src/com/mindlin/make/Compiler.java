@@ -14,4 +14,5 @@ public interface Compiler {
 	Linker<?> LD();
 	boolean objdump(Path elf, Path listing);
 	boolean objcopy(Path elf, Path image);
+	boolean ranlib(Path library);
 }

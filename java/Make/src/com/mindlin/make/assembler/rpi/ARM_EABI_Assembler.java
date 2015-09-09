@@ -136,8 +136,8 @@ public class ARM_EABI_Assembler extends Assembler<ARM_EABI_Assembler> {
 	@Override
 	public boolean execute() {
 		Result r = CmdUtil.exec(getCommand());
-		r.printErrorLog();
-		r.printLog();
+		r.printErrorLog(2);
+		r.printLog(2);
 		boolean success=r.wasSuccess();
 		if(!success) {
 			for(Exception e:r.getExceptions())

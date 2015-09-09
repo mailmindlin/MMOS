@@ -1,3 +1,4 @@
+.title "Memset assembly internals"
 /*
 	This is part of the "copies and fills" library by Simon Hall
 
@@ -102,3 +103,5 @@ stray_bytes:
 #if defined(__linux__) && defined(__ELF__)
 .section .note.GNU-stack,"",%progbits
 #endif
+.ltorg
+.end

@@ -2,10 +2,10 @@
  * Byte.cpp
  *
  *  Created on: Feb 23, 2015
- *      Author: wfeehery17
+ *      Author: mailmindlin
  */
 
-#include "Byte.hpp"
+#include "Byte.h"
 
 Byte::~Byte() {
 	// TODO Auto-generated destructor stub

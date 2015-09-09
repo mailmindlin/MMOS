@@ -52,14 +52,12 @@ public class ARM_EABI_CCompiler extends CCompiler<ARM_EABI_CCompiler> {
 						warnings.getJSONArray("suppressed").forEach(
 								(tmp) -> {
 									if (!(tmp instanceof String))
-										throw new IllegalArgumentException("Argument '"
-												+ tmp.getClass().getCanonicalName()
-												+ "' isn't a string!\n" + tmp.toString());
+										throw new IllegalArgumentException("Argument '" + tmp.getClass().getCanonicalName() + "' isn't a string!\n" + tmp.toString());
 									String warning = tmp.toString();
 									if (warning.equals("deprecated")) {
 										result.add("-mno-warn-deprecated");
 									} else {
-										System.out.println("Unknown warning: " + warning);
+										result.add("-Wno-"+warning.trim());
 									}
 								});
 					} else if (k.equals("ldscript") && (v instanceof Path)) {
@@ -104,7 +102,7 @@ public class ARM_EABI_CCompiler extends CCompiler<ARM_EABI_CCompiler> {
 				throw new IllegalStateException("Illegal flag type: " + o.getClass().getCanonicalName());
 		});
 		data.getJSONObject("defines").forEach((k,v)->{
-			result.put("-Wa,--defsym,"+k+"="+v);
+			result.put("-Wa,--defsym,"+k+"="+v).put("-Wp,-D"+k+"="+v).put("-D"+k+"="+v);
 		});
 		data.getJSONArray("libraries").forEach((o)->{
 			result.put("-Wl,--library,"+o.toString());
@@ -133,8 +131,8 @@ public class ARM_EABI_CCompiler extends CCompiler<ARM_EABI_CCompiler> {
 
 	@Override
 	public ARM_EABI_CCompiler addOptimization(String optimization) {
-		flag("-"+optimization);
-		return null;
+		flag(optimization);
+		return this;
 	}
 
 	@Override

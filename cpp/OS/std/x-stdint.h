@@ -2,7 +2,7 @@
  * stdint.h
  *
  *  Created on: Jan 30, 2015
- *      Author: wfeehery17
+ *      Author: mailmindlin
  */
 /* Copyright (c) 2002,2004,2005 Marek Michalkiewicz
  Copyright (c) 2005, Carlos Lamas
@@ -45,6 +45,7 @@
 #ifdef __REALCOMP__
 #include <stdint.h>
 #else
+#warning "Using custom implementation of stdint"
 #ifndef __STDINT_H_
 #define __STDINT_H_
 
@@ -67,7 +68,7 @@
 #endif
 
 /* Integer types */
-
+#define __DOXYGEN__
 #if defined(__DOXYGEN__)
 
 /* doxygen gets confused by the __attribute__ stuff */

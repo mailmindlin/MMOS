@@ -2,7 +2,7 @@
  * AbstractCollection.hpp
  *
  *  Created on: Feb 19, 2015
- *      Author: wfeehery17
+ *      Author: mailmindlin
  */
 
 #ifndef STD_UTIL_ABSTRACTCOLLECTION_HPP_
@@ -13,6 +13,7 @@
 #include "../x-stddef.h"
 #include "Collection.hpp"
 #include "Iterator.hpp"
+#include "../memory.h"
 
 template<class T>
 class AbstractCollection: public Collection<T> {

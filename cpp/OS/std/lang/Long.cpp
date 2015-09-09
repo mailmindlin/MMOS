@@ -2,15 +2,14 @@
  * Long.cpp
  *
  *  Created on: Feb 23, 2015
- *      Author: wfeehery17
+ *      Author: mailmindlin
  */
 
-#include "Long.hpp"
-
+#include "Long.h"
 #include "../exceptions/NumberFormatException.h"
-#include "Byte.hpp"
-#include "Character.hpp"
-#include "Integer.hpp"
+#include "Byte.h"
+#include "Character.h"
+#include "Integer.h"
 #include "Object.hpp"
 #include "Short.hpp"
 
@@ -27,15 +26,27 @@ Long::~Long() {
 }
 
 uint8_t Long::byteValue() const {
-	return (uint8_t) value & 0xFF;
+	if(value>Byte::MAX_VALUE)
+		return Byte::MAX_VALUE;
+	if(value<Byte::MIN_VALUE)
+		return Byte::MIN_VALUE;
+	return (uint8_t) value & Byte::UNSIGNED_MASK;
 }
 
 short Long::shortValue() const {
-	return (short) value & 0xFFFF;
+	if(value>Short::MAX_VALUE)
+		return Short::MAX_VALUE;
+	if(value<Short::MIN_VALUE)
+		return Short::MIN_VALUE;
+	return (short) value & Short::UNSIGNED_MASK;
 }
 
 int Long::intValue() const {
-	return (int) value & 0xFFFFFFFF;
+	if(value>Integer::MAX_VALUE)
+		return Integer::MAX_VALUE;
+	if(value<Integer::MIN_VALUE)
+		return Integer::MIN_VALUE;
+	return (int) value & Integer::UNSIGNED_MASK;
 }
 
 float Long::floatValue() const {
@@ -46,7 +57,7 @@ double Long::doubleValue() const {
 	return value / 1.0;
 }
 long Long::longValue() const {
-	return value & UNSIGNED_MASK;
+	return value;
 }
 
 String& Long::toString() {
@@ -266,7 +277,11 @@ Long& Long::operator =(uint8_t n) {
 	if (n < 0)
 		cv = -cv;
 	delete this;
-	return new Long(cv);
+	return *(new Long(cv));
+}
+Long& Long::operator =(Number& n) {
+	delete this;
+	return *(new Long(n.longValue()));
 }
 
 Long& Long::operator +=(int n) {
@@ -321,43 +336,43 @@ Long& Long::operator +(uint8_t n) const {
 }
 
 Long& Long::operator -(Number& n) const {
-	return new Long(value - n.longValue());
+	return *(new Long(value - n.longValue()));
 }
 
 Long& Long::operator -(long n) const {
-	return new Long(value - n);
+	return *(new Long(value - n));
 }
 
 Long& Long::operator -(int n) const {
-	return operator-((Number&) new Integer(n));
+	return operator-((Number&) *(new Integer(n)));
 }
 
 Long& Long::operator -(short n) const {
-	return operator-((Number&) new Short(n));
+	return operator-((Number&) *(new Short(n)));
 }
 
 Long& Long::operator -(uint8_t n) const {
-	return operator-((Number&) new Byte(n));
+	return operator-((Number&) *(new Byte(n)));
 }
 
 Long& Long::operator *(Number& n) const {
-	return new Long(value * n.longValue());
+	return *(new Long(value * n.longValue()));
 }
 
 Long& Long::operator *(long n) const {
-	return new Long(value * n);
+	return *(new Long(value * n));
 }
 
 Long& Long::operator *(int n) const {
-	return operator*((Number&) new Integer(n));
+	return operator*((Number&) *(new Integer(n)));
 }
 
 Long& Long::operator *(short n) const {
-	return operator*((Number&) new Short(n));
+	return operator*((Number&) *(new Short(n)));
 }
 
 Long& Long::operator *(uint8_t n) const {
-	return operator*((Number&) new Byte(n));
+	return operator*((Number&) *(new Byte(n)));
 }
 
 Long& Long::operator /(Number& n) const {
@@ -469,6 +484,11 @@ String& Long::stringFor(long i) {
 	getChars(i, size, buf);
 	return new String(0, size, buf);
 }
+
+bool Long::equals(Long& other) {
+	return this->value==other.value;
+}
+
 String& Long::stringFor(long i, size_t radix) {
 	if (radix < Character::MIN_RADIX || radix > Character::MAX_RADIX)
 		radix = 10;

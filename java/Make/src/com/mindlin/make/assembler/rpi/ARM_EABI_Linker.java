@@ -88,6 +88,9 @@ public class ARM_EABI_Linker extends Linker<ARM_EABI_Linker> {
 						throw new IllegalStateException("Illegal flag type: "
 								+ o.getClass().getCanonicalName());
 				});
+		data.getJSONObject("defines").forEach((k,v)->{
+			result.put("-Wa,--defsym,"+k+"="+v).put("-Wp,-D"+k+"="+v);
+		});
 		data.getJSONArray("includes").forEach(
 				(o) -> {
 					if (o instanceof Path) {

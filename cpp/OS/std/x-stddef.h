@@ -31,6 +31,7 @@
 #ifdef __REALCOMP__
 #include <stddef.h>
 #else
+#warning "Using custom implementation of stddef"
 #if (!defined(_STDDEF_H) && !defined(_STDDEF_H_) && !defined(_ANSI_STDDEF_H) \
      && !defined(__STDDEF_H__)) \
     || defined(__need_wchar_t) || defined(__need_size_t) \

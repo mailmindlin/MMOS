@@ -5,6 +5,8 @@ import java.nio.file.Path;
 
 import org.json.JSONArray;
 
+import util.CmdUtil;
+import util.CmdUtil.Result;
 import util.StrUtils;
 
 import com.mindlin.make.Archiver;
@@ -19,7 +21,7 @@ public class ARM_EABI_Archiver extends Archiver<ARM_EABI_Archiver> {
 	@Override
 	public String[] getCommand() {
 		JSONArray result = new JSONArray();
-		result.put(0, data.get("cmd")).put(1, "rvs");
+		result.put(0, data.get("cmd")).put(1, "rcvS");
 		if (data.has("output"))
 			result.put(data.<Path>getAs("output").toString());
 		// add flags
@@ -43,5 +45,42 @@ public class ARM_EABI_Archiver extends Archiver<ARM_EABI_Archiver> {
 					}
 				});
 		return StrUtils.toStringArray(result);
+	}
+	@Override
+	public boolean execute() {
+		Result r = CmdUtil.exec(getCommand());
+		//parse errors
+		{
+			String[] errors = r.getErrorLog();
+			for (int i = 0; i < errors.length; i++) {
+				String tmp = errors[i];
+				if(tmp==null)
+					continue;
+				//snip the prefix
+				if(tmp.startsWith(data.getString("cmd")+": "))
+					tmp=tmp.substring(data.getString("cmd").length()+2);
+				else {
+//					System.out.println("Didn't start with '"+data.getString("cmd")+'\'');
+				}
+				if(tmp.startsWith("creating "))
+					//ignore this one, it's a warning
+					continue;
+//				if(tmp.startsWith("a - "+(data.getJSONArray("targets").get(0).toString())))
+				if(tmp.startsWith("a - "))
+					continue;
+				System.out.println("a - "+(data.getJSONArray("targets").get(0).toString()));
+				System.err.println(errors[i]);
+				if(!errors[i].endsWith("\n"))
+					System.err.println();
+			}
+		}
+		r.printLog(2);
+		boolean success=r.wasSuccess();
+		if(!success) {
+			for(Exception e:r.getExceptions())
+				e.printStackTrace();
+			return false;
+		}
+		return true;
 	}
 }

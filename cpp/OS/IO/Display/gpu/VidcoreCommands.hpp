@@ -1,0 +1,49 @@
+/*
+ * VidcoreCommands.h
+ *
+ *  Created on: Mar 6, 2015
+ *      Author: mailmindlin
+ */
+
+#ifndef IO_DISPLAY_GPU_VIDCORECOMMANDS_HPP_
+#define IO_DISPLAY_GPU_VIDCORECOMMANDS_HPP_
+namespace Displays {
+namespace GPU {
+//TV service commands
+typedef enum {
+   TV_GET_STATE = 0,
+   TV_HDMI_ON_PREFERRED,
+   TV_HDMI_ON_BEST,
+   TV_HDMI_ON_EXPLICIT,
+   TV_SDTV_ON,
+   TV_OFF,
+   TV_QUERY_SUPPORTED_MODES,
+   TV_QUERY_MODE_SUPPORT,
+   TV_QUERY_AUDIO_SUPPORT,
+   TV_ENABLE_COPY_PROTECT,
+   TV_DISABLE_COPY_PROTECT,
+   TV_SHOW_INFO,
+   TV_GET_AV_LATENCY,
+   TV_HDCP_SET_KEY,
+   TV_HDCP_SET_SRM,
+   TV_SET_SPD,
+   TV_SET_DISPLAY_OPTIONS,
+   TV_TEST_MODE_START,
+   TV_TEST_MODE_STOP,
+   TV_DDC_READ,
+   TV_SET_ATTACHED,
+   TV_SET_PROP,
+   TV_GET_PROP,
+   TV_GET_DISPLAY_STATE,
+   TV_QUERY_SUPPORTED_MODES_ACTUAL,
+   TV_GET_DEVICE_ID,
+   //Add more commands here
+   TV_END_OF_LIST
+} TV_CMD_CODE_T;
+}
+}
+
+
+
+
+#endif /* IO_DISPLAY_GPU_VIDCORECOMMANDS_HPP_ */

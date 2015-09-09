@@ -2,7 +2,7 @@
  * RaspberryPi.h
  *
  *  Created on: Feb 18, 2015
- *      Author: wfeehery17
+ *      Author: mailmindlin
  */
 
 #ifndef IO_RASPBERRYPI_H_
@@ -13,7 +13,7 @@
 #ifndef __RPI_MODEL
 #define __RPI_MODEL MODEL_B
 #if __REALCOMP__
-#warning "No raspberry pi model given, defaulting to model B";
+#warning "No raspberry pi model specified, defaulting to 'model B'."
 #endif
 #endif
 EXC class RaspberryPi {
@@ -25,8 +25,8 @@ public:
 	static const int MODEL_B		= 2;
 	static const int MODEL_A_PLUS	= 3;
 	static const int MODEL_B_PLUS	= 4;
-	static const int MODEL_B_2 = 3;
-	static const int MODEL_CM = 4;
+	static const int MODEL_B_2		= 3;
+	static const int MODEL_CM		= 4;
 };
 
 #endif /* IO_RASPBERRYPI_H_ */

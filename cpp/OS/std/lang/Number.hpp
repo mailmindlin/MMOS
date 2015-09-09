@@ -2,7 +2,7 @@
  * Number.hpp
  *
  *  Created on: Feb 23, 2015
- *      Author: wfeehery17
+ *      Author: mailmindlin
  */
 
 #ifndef STD_LANG_NUMBER_HPP_
@@ -10,7 +10,7 @@
 
 #include "../x-stddef.h"
 #include "../x-stdint.h"
-#include "Comparator.hpp"
+#include "Comparable.hpp"
 
 class Number: public Object, Comparable<Number> {
 public:

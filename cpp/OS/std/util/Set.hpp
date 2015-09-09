@@ -2,7 +2,7 @@
  * Set.hpp
  *
  *  Created on: Feb 19, 2015
- *      Author: wfeehery17
+ *      Author: mailmindlin
  */
 
 #ifndef STD_UTIL_SET_HPP_

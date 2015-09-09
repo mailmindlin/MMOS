@@ -1,0 +1,30 @@
+{
+	"first":{
+		"define":{
+			"EXC": "extern \"C\"",
+			"EXT": "extern \"C++\""
+		}
+	},
+	"files":[
+		"algorithm.h",
+		"limits.h",
+		"Math.h",
+		"memcpy.h",
+		"memory.h",
+		"RaspberryPi.h",
+		"stdasm.h",
+		"strlen.h",
+		"Time.cpp",
+		"exceptions/ArrayIndexOutOfBoundsException.h",
+		"exceptions/Exception.h",
+		"exceptions/NumberFormatException.h",
+		"exceptions/OutOfMemoryException.h",
+		"x-errno.h",
+		"x-iterator.h",
+		"x-stdarg.h",
+		"x-stddef.h",
+		"x-stdint.h",
+		"x-stdio.h",
+		"x-vector.h"
+	]
+}

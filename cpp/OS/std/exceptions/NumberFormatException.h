@@ -2,16 +2,19 @@
  * NumberFormatException.hpp
  *
  *  Created on: Feb 23, 2015
- *      Author: wfeehery17
+ *      Author: mailmindlin
  */
 
 #ifndef STDLIB_EXCEPTIONS_NUMBERFORMATEXCEPTION_
 #define STDLIB_EXCEPTIONS_NUMBERFORMATEXCEPTION_
+
+#include "../lang/Object.hpp"
+#include "../lang/String.h"
+
 #if (!defined(EXC)) || (!defined(EXT))
 #define EXC
 #define EXT
 #endif
-#include "../lang/String.hpp"
 #include "../util/StringBuffer.hpp"
 #include "Exception.h"
 

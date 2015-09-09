@@ -80,12 +80,12 @@ public class Main {
 			.addInference("bin.java", SymlinkResolver.resolve(new File(bin, "java").getAbsoluteFile()))
 			.addInference("src.asm",SymlinkResolver.resolve(new File("asm/rpi").getAbsoluteFile()))
 			.addInference("src.ld",SymlinkResolver.resolve(new File("linker").getAbsoluteFile()))
-			.addInference("src.cpp", SymlinkResolver.resolve(new File("cpp/OS").getAbsoluteFile()))
-			.addInference("src.java", SymlinkResolver.resolve(new File("java").getAbsoluteFile()))
+			.addInference("src.cpp", SymlinkResolver.resolve(new File("Kernel").getAbsoluteFile()))
+//			.addInference("src.java", SymlinkResolver.resolve(new File("java").getAbsoluteFile()))
 			.addInference("bin.listing", new File(bin,"kernel.list"))
 			.addInference("bin.elf", new File(bin,"kernel.elf"))
 			.addInference("bin.map", new File(bin,"kernel.map"))
-			.addInference("target.arch","armv6")//will default to RPIv1
+			.addInference("target.arch","armv7")//will default to RPIv2
 			.addInference("CYGWIN",false)
 			.addInference("CARCH",SystemProperty.OS_ARCH.get("x86_64"))
 			.addInference("COS",SystemProperty.OS_NAME.get("Windows"))

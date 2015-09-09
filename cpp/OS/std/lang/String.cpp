@@ -2,21 +2,20 @@
  * String.cpp
  *
  *  Created on: Feb 19, 2015
- *      Author: wfeehery17
+ *      Author: mailmindlin
  */
 
-#include "String.hpp"
+#include "String.h"
 
 #include "../algorithm.h"
 #include "../limits.h"
 #include "../memory.h"
 #include "../Math.h"
 #include "../strlen.h"
-#include "Double.hpp"
-#include "Integer.hpp"
-#include "Long.hpp"
+#include "Double.h"
+#include "Integer.h"
+#include "Long.h"
 
-const size_t String::size;
 String::String(const String& str) :
 		size(str.length) {
 	expand();
@@ -364,8 +363,8 @@ String& String::valueOf(int i, size_t radix) {
 String& String::valueOf(long l, size_t radix) {
 	return Long::stringFor(l, radix);
 }
-String& String::valueOfPtr(void* l) {
-	return valueOf((int) l, 16);
+String& String::valueOfPtr(const void* ptr) {
+	return valueOf((int) ptr, 16);
 }
 
 String& String::valueOf(Object& obj) {

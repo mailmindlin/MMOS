@@ -2,10 +2,10 @@
  * Character.cpp
  *
  *  Created on: Feb 23, 2015
- *      Author: wfeehery17
+ *      Author: mailmindlin
  */
 
-#include "Character.hpp"
+#include "Character.h"
 
 Character::Character() {
 	// TODO Auto-generated constructor stub

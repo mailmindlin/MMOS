@@ -2,7 +2,7 @@
  * NodeIterator.cpp
  *
  *  Created on: Feb 23, 2015
- *      Author: wfeehery17
+ *      Author: mailmindlin
  */
 
 #include "NodeIterator.hpp"

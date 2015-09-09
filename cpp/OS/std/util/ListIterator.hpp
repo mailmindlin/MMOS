@@ -2,7 +2,7 @@
  * ListIterator.hpp
  *
  *  Created on: Feb 23, 2015
- *      Author: wfeehery17
+ *      Author: mailmindlin
  */
 
 #ifndef STD_UTIL_LISTITERATOR_HPP_

@@ -2,7 +2,7 @@
  * StringBuffer.cpp
  *
  *  Created on: Feb 19, 2015
- *      Author: wfeehery17
+ *      Author: mailmindlin
  */
 
 #include "StringBuffer.hpp"
@@ -33,7 +33,7 @@ String& StringBuffer::toString() {
 		Array::copy(s->data, result->data, 0, index, s->length());
 		index += s->length();
 	}
-	return result;
+	return *result;
 }
 
 StringBuffer& StringBuffer::operator <<(String& str) {

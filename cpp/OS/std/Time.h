@@ -2,7 +2,7 @@
  * Time.h
  *
  *  Created on: Feb 18, 2015
- *      Author: wfeehery17
+ *      Author: mailmindlin
  */
 
 #ifndef STD_TIME_H_
@@ -14,8 +14,12 @@
 #define EXC
 #define EXT
 #endif
+#ifdef __REALCOMP__
+#include <ctime>
+#else
 EXT typedef uint64_t time_t;
 EXT typedef uint64_t clock_t;
+#endif
 namespace Time {
 EXT uint32_t getSystemTimerBase();
 EXC clock_t clock();

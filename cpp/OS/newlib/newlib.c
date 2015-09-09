@@ -1,10 +1,13 @@
 /*
- * newlibimpl.c
+ * newlib.c
  *
  *  Created on: Feb 26, 2015
- *      Author: wfeehery17
+ *      Author: mailmindlin
  */
+
+#ifndef NEWLIB_NEWLIB_H_
 #include "newlib.h"
+#endif
 /**
  * Abort the OS
  */
@@ -16,6 +19,7 @@ extern void abort(void) {
  * @param code exit code
  */
 extern void _exit(int code) {
+	kernel_shutdown();
 	abort();
 }
 /**
@@ -41,7 +45,7 @@ extern int _fstat(file_t file, struct stat *st) {
  * @return PID
  */
 extern int _getpid(void) {
-	return 1;
+	return 1;//scheduler_getPID();
 }
 /**
  * Query if output stream is a terminal
@@ -83,12 +87,13 @@ extern int _read(file_t file, char *buffer, int len) {
 }
 /**
  * Increase program data space
- * @param incr ammount to increase by
+ * @param incr amount to increase by
  * @return pointer to start of new memory
  */
+/*
 extern caddr_t _sbrk(int incr) {
 	unsigned int* stack_ptr = ({ register unsigned int* arg0 __asm("sp"); arg0; });
-	extern char _end; /* Defined by the linker */
+	extern char _end; // Defined by the linker
 	static char *heap_end;
 	char *prev_heap_end;
 
@@ -96,14 +101,14 @@ extern caddr_t _sbrk(int incr) {
 		heap_end = &_end;
 	}
 	prev_heap_end = heap_end;
-	if (heap_end + incr > stack_ptr) {
-		write(1, "Heap and stack collision\n", 25);
+	if (((unsigned int)heap_end + incr) > *stack_ptr) {
+		_write(1, "Heap and stack collision\n", 25);
 		abort();
 	}
 
 	heap_end += incr;
 	return (caddr_t) prev_heap_end;
-}
+}*/
 /**
  * Write data from buffer to file
  * @param file file descriptor

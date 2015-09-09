@@ -2,14 +2,14 @@
  * Exception
  *
  *  Created on: Feb 19, 2015
- *      Author: wfeehery17
+ *      Author: mailmindlin
  */
 
 #ifndef STD_EXCEPTIONS_EXCEPTION_H_
 #define STD_EXCEPTIONS_EXCEPTION_H_
 
-#include "../lang/String.hpp"
 #include "../lang/Object.hpp"
+#include "../lang/String.h"
 
 #if (!defined(EXC)) || (!defined(EXT))
 #define EXC

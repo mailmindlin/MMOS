@@ -2,12 +2,12 @@
  * Object.cpp
  *
  *  Created on: Mar 1, 2015
- *      Author: wfeehery17
+ *      Author: mailmindlin
  */
 
 #include "Object.hpp"
 
-#include "String.hpp"
+#include "String.h"
 
 String& valueOfPtr(const void* ptr) {
 	return String::valueOfPtr(ptr);

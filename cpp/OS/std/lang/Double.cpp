@@ -2,10 +2,10 @@
  * Double.cpp
  *
  *  Created on: Feb 23, 2015
- *      Author: wfeehery17
+ *      Author: mailmindlin
  */
 
-#include "Double.hpp"
+#include "Double.h"
 
 Double::Double() {
 	// TODO Auto-generated constructor stub

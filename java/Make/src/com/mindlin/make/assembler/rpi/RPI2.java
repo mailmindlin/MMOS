@@ -1,10 +1,10 @@
 package com.mindlin.make.assembler.rpi;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
 
 import util.CmdUtil;
-import util.CmdUtil.Result;
 import util.Properties;
 
 import com.mindlin.make.CCompiler;
@@ -75,20 +75,35 @@ public class RPI2 implements Compiler {
 
 	@Override
 	public boolean objdump(Path elf, Path listing) {
-		Result r=CmdUtil.exec(new File(ARMGNU+"objdump").getAbsolutePath()+" -d "+elf.toString()+" > "+listing.toString());
-		r.printLog();
-		r.printErrorLog();
-		return r.wasSuccess();
+		try {
+			CmdUtil.exec(new Properties(), new File(ARMGNU+"objdump").getAbsolutePath()+" -x -S -D "+elf.toString(), listing.toFile());
+		} catch (IOException | InterruptedException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
 	}
 
 	@Override
 	public boolean objcopy(Path elf, Path image) {
-		Result r=CmdUtil.exec(new File(ARMGNU+"objcopy").getAbsolutePath()+" "+elf.toString()+" -O binary "+image.toString());
-		r.printLog();
-		r.printErrorLog();
-		return r.wasSuccess();
+		try {
+			CmdUtil.exec(new Properties(), new File(ARMGNU+"objcopy").getAbsolutePath()+" "+elf.toString()+" -O binary "+image.toString());
+		} catch (IOException | InterruptedException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
 	}
-	
+	@Override
+	public boolean ranlib(Path lib) {
+		try {
+			CmdUtil.exec(new Properties(), new File(ARMGNU+"ranlib").getAbsolutePath()+" "+lib.toString());
+		} catch (IOException | InterruptedException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
 
 	/*
 	 * @Override public boolean link(Properties props) { String

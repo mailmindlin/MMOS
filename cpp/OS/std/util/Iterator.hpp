@@ -2,7 +2,7 @@
  * Iterator
  *
  *  Created on: Feb 19, 2015
- *      Author: wfeehery17
+ *      Author: mailmindlin
  */
 
 #ifndef STD_UTIL_ITERATOR_HPP_

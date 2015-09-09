@@ -25,10 +25,18 @@
 #define UART0_ITIP   (UART0_BASE + 0x84)
 #define UART0_ITOP   (UART0_BASE + 0x88)
 #define UART0_TDR    (UART0_BASE + 0x8C)
+#if (!defined(EXC)) || (!defined(EXT))
+#define EXC extern "C"
+#define EXT extern "C++"
+#endif
 namespace ASM {
 EXC inline void mmio_write(uint32_t addr, uint32_t data) {
 	uint32_t *ptr = (uint32_t*) addr;
 	asm volatile("str %[data], [%[reg]]" : : [reg]"r"(ptr), [data]"r"(data));
+}
+inline void half_write(uint32_t addr, uint16_t data) {
+	uint32_t *ptr = (uint32_t*) addr;
+	asm volatile("strh %[data], [%[reg]]" : : [reg]"r"(ptr), [data]"r"(data));
 }
 
 EXC inline uint32_t mmio_read(uint32_t addr) {
@@ -50,6 +58,9 @@ EXC inline uint64_t mmio_readd(uint32_t reg, uint32_t shift) {
 	return data0 | (((uint64_t) data1) << 32);
 #endif
 }
+//macro versions
+#define STRH(data,reg) {uint32_t *ptr = (uint32_t*) addr; asm volatile("str %[data], [%[reg]]" : : [reg]"r"(ptr), [data]"r"(data));}
+#define STR(data,reg) {uint32_t *ptr = (uint32_t*) addr; asm volatile("str %[data], [%[reg]]" : : [reg]"r"(ptr), [data]"r"(data));}
 /* Loop <delay> times in a way that the compiler won't optimize away. */
 EXC inline void delay(int32_t count) {
 	asm volatile("__delay_%=: subs %[count], %[count], #1; bne __delay_%=\n" : : [count]"r"(count) : "cc");

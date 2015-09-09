@@ -2,13 +2,13 @@
  * StringBuffer.h
  *
  *  Created on: Feb 19, 2015
- *      Author: wfeehery17
+ *      Author: mailmindlin
  */
 
 #ifndef STD_UTIL_STRINGBUFFER_HPP_
 #define STD_UTIL_STRINGBUFFER_HPP_
 
-#include "../lang/String.hpp"
+#include "../lang/String.h"
 #include "../x-stddef.h"
 #include "LinkedList.hpp"
 

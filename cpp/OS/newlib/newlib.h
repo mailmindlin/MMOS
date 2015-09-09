@@ -2,20 +2,29 @@
  * newlib.h
  *
  *  Created on: Mar 3, 2015
- *      Author: wfeehery17
+ *      Author: mailmindlin
  */
 
 #ifndef NEWLIB_NEWLIB_H_
 #define NEWLIB_NEWLIB_H_
 
-#include <errno.h>
-#include <sys/errno.h>
+#include "../std/x-errno.h"
+//#include "sbrk.cpp"
+
+#ifndef __REALCOMP__
+#warning "NO REALCOMP!"
+static struct stat{
+uint32_t st_mode;
+};
+extern typedef char* caddr_t;//might actually be the real definition of caddr_t
+#else
+//include stuff
 #include <sys/fcntl.h>
 #include <sys/stat.h>
 #include <sys/time.h>
 #include <sys/times.h>
 #include <sys/types.h>
-
+#endif
 #include "../std/x-stdint.h"
 
 #undef errno
@@ -27,20 +36,21 @@ extern int EINVAL;
 extern int S_IFCHR;
 #endif
 
-#ifndef __REALCOMP__
-#warning "NO REALCOMP!"
-/*static struct stat{
-uint32_t st_mode;
-};*/
-//extern typedef char* caddr_t;//might actually be the real definition of caddr_t
-#else
-#warning "REALCOMP"
-#endif
-
+extern unsigned int scheduler_getPID();
+//make it an extern if it's using c++
 #ifdef __cplusplus
 extern "C" {
 #endif
+/**
+ * No idea what this is, ,but removing it will break it at linktime.
+ */
+void * __dso_handle;
+
 typedef uint32_t file_t;
+/**
+ * Should be declared in Kernel.cpp
+ */
+extern void kernel_shutdown(void);
 /**
  * Abort the OS
  */
@@ -102,7 +112,7 @@ extern int _read(file_t file, char *buffer, int len);
  * @param incr ammount to increase by
  * @return pointer to start of new memory
  */
-extern caddr_t _sbrk(int incr);
+extern void* _sbrk(int incr);
 /**
  * Write data from buffer to file
  * @param file file descriptor
@@ -114,4 +124,5 @@ extern int _write(file_t file, char *buffer, int len);
 #ifdef __cplusplus
 }
 #endif
+#include "sbrk.cpp"
 #endif /* NEWLIB_NEWLIB_H_ */

@@ -1,12 +1,16 @@
 ENTRY(_start)
-/*MEMORY {
-	ram : ORIGIN = 0x80000000, LENGTH = 0x10000
-}*/
+ 
 SECTIONS
 {
     /* Starts at LOADER_ADDR. */
-    . = 0x8000;
+    . = 0x8000; /*turns out to be 32kb*/
     __start = .;
+    __init_start = .;
+    .init :
+    {
+    	*(.init)
+    }
+    __init_end=.;
     __text_start = .;
     .text :
     {
@@ -23,56 +27,31 @@ SECTIONS
     }
     . = ALIGN(4096); /* align to page size */
     __rodata_end = .;
-	.ARM.extab   : { *(.ARM.extab* .gnu.linkonce.armextab.*) }
-	PROVIDE_HIDDEN (__exidx_start = .);
-	.ARM.exidx   : { *(.ARM.exidx* .gnu.linkonce.armexidx.*) }
-	PROVIDE_HIDDEN (__exidx_end = .);
-	.preinit_array     :
-	{
-		PROVIDE_HIDDEN (__preinit_array_start = .);
-		KEEP (*(.preinit_array))
-		PROVIDE_HIDDEN (__preinit_array_end = .);
-	}
-	.init_array     :
-	{
-		PROVIDE_HIDDEN (__init_array_start = .);
-		KEEP (*(SORT(.init_array.*)))
-		KEEP (*(.init_array))
-		PROVIDE_HIDDEN (__init_array_end = .);
-	}
-	.fini_array     :
-	{
-	PROVIDE_HIDDEN (__fini_array_start = .);
-	KEEP (*(SORT(.fini_array.*)))
-	KEEP (*(.fini_array))
-	PROVIDE_HIDDEN (__fini_array_end = .);
-	}
-	__data_start = .;
+ 
+    __data_start = .;
     .data :
     {
-		*(.data .data.* .gnu.linkonce.d.*)
-		SORT(CONSTRUCTORS)
-	}
-	. = ALIGN(4096); /* align to page size */
-	__data_end = .;
-	__bss_start = .;
-	.bss :
-	{
-		bss = .;
-		*(.bss)
-	}
-	. = ALIGN(4096); /* align to page size */
-	_bss_end__ = . ; __bss_end__ = . ;
-	__bss_end = . ;
-	PROVIDE(bss_end = .);
-	__end__ = . ;
-	_end = .; PROVIDE (end = .);
-	.stack         0x80000 :
-	{
-		_stack = .;
-		*(.stack)
-	}
-	.ARM.attributes 0 : { KEEP (*(.ARM.attributes)) KEEP (*(.gnu.attributes)) }
-	.note.gnu.arm.ident 0 : { KEEP (*(.note.gnu.arm.ident)) }
-	/DISCARD/ : { *(.note.GNU-stack) *(.gnu_debuglink) *(.gnu.lto_*) }
+        *(.data)
+    }
+    . = ALIGN(4096); /* align to page size */
+    __data_end = .;
+ 
+    __bss_start = .;
+    .bss :
+    {
+        bss = .;
+        *(.bss)
+    }
+    . = ALIGN(4096); /* align to page size */
+    __bss_end = .;
+    __exidx_start = .;
+    .ARM.exidx   : { *(.ARM.exidx* .gnu.linkonce.armexidx.*) }
+    __exidx_end = .;
+    _HEAP_START = .;
+    .heap :
+    {
+        . = 268435455;/*(1024^2 * 256) - 1; 256 mb*/
+    }
+    _HEAP_END = .;
+    __end = .;
 }

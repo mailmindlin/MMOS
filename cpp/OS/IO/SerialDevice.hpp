@@ -1,14 +1,13 @@
 /*
  * SerialDevice.h
- *
+ * A generic class for a serial device for communication.
+ * Basically just supports a text connection with possible buffering.
  *  Created on: Feb 27, 2015
- *      Author: wfeehery17
+ *      Author: mailmindlin
  */
 
 #ifndef IO_SERIALDEVICE_HPP_
 #define IO_SERIALDEVICE_HPP_
-
-#include <string.h>
 
 #include "../std/x-stdarg.h"
 #include "../std/x-stddef.h"

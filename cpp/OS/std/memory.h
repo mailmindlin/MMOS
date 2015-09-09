@@ -2,7 +2,7 @@
  * memory.h
  *
  *  Created on: Feb 19, 2015
- *      Author: wfeehery17
+ *      Author: mailmindlin
  */
 
 #ifndef STD_MEMORY_H_
@@ -23,7 +23,7 @@
 //}
 namespace Array {
 EXT void copy(void* src, void* dest, size_t ooffset, size_t toffset, size_t elements, size_t elementSizeBytes) {
-	void* srcPtr = reinterpret_cast<void*>(src+ooffset);
+	const void* srcPtr = reinterpret_cast<const void*>(src+ooffset);
 	void* dstPtr = reinterpret_cast<void*>(dest+toffset);
 	//length in bytes
 	size_t len = elements*elementSizeBytes;

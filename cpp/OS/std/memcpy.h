@@ -2,7 +2,7 @@
  * memcpy.h
  *
  *  Created on: Feb 24, 2015
- *      Author: wfeehery17
+ *      Author: mailmindlin
  */
 
 #ifndef STD_MEMCPY_H_

@@ -73,7 +73,7 @@ public class RPI implements Compiler {
 	@Override
 	public boolean objdump(Path elf, Path listing) {
 		try {
-			CmdUtil.exec(new Properties(), new File(ARMGNU+"objdump").getAbsolutePath()+" -d "+elf.toString(), listing.toFile());
+			CmdUtil.exec(new Properties(), new File(ARMGNU+"objdump").getAbsolutePath()+" -x -S -D "+elf.toString(), listing.toFile());
 		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();
 			return false;
@@ -91,8 +91,16 @@ public class RPI implements Compiler {
 		}
 		return true;
 	}
-	
-
+	@Override
+	public boolean ranlib(Path lib) {
+		try {
+			CmdUtil.exec(new Properties(), new File(ARMGNU+"ranlib").getAbsolutePath()+" "+lib.toString());
+		} catch (IOException | InterruptedException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
 	/*
 	 * @Override public boolean link(Properties props) { String
 	 * includes=StrUtils.concatWithSpaces((s)->{ List<String> output = new

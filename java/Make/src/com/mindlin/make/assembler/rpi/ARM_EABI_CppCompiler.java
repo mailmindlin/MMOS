@@ -9,6 +9,7 @@ import java.util.Set;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import util.FileUtils;
 import util.StrUtils;
 
 import com.mindlin.make.CCompiler;
@@ -104,20 +105,26 @@ public class ARM_EABI_CppCompiler extends CCompiler<ARM_EABI_CppCompiler> {
 				throw new IllegalStateException("Illegal flag type: " + o.getClass().getCanonicalName());
 		});
 		data.getJSONObject("defines").forEach((k,v)->{
-			result.put("-Wa,--defsym,"+k+"="+v);
+			result.put("-Wa,--defsym,"+k+"="+v).put("-Wp,-D"+k+"="+v);
 		});
+		data.getJSONArray("includes").forEach((o) -> {
+				if (o instanceof Path) {
+					String p = ((Path) o).toFile().getPath();
+					if (Files.isDirectory((Path) o))
+						result.put("-Wl,-L," + p).put("-I " + p);
+//					else
+//						result.put("-l " + ((Path) o).toFile().getPath());
+				} else {
+					throw new IllegalStateException("Illegal include type: "+ o.getClass().getCanonicalName());
+				}
+		});		
 		data.getJSONArray("libraries").forEach((o)->{
-			result.put("-Wl,--library,"+o.toString());
-		});
-		data.getJSONArray("includes").forEach((o)->{
-			if (o instanceof Path) {
-				if(Files.isDirectory((Path)o))
-					result.put("-Wl,-L,"+((Path) o).toFile().getPath());
-				else
-					result.put("-l"+((Path) o).toFile().getPath());
-			} else {
-				throw new IllegalStateException("Illegal include type: " + o.getClass().getCanonicalName());
-			}
+			if(o.toString().isEmpty())
+				return;
+			if(o.toString().endsWith(".o"))
+			 	data.getJSONArray("targets").add(new File((String)o).toPath());
+			else
+				result.put("-Wl,--library,"+FileUtils.getNameExt(o.toString())).put("-l "+FileUtils.getNameExt(o.toString()));
 		});
 		data.getJSONArray("targets").forEach((o)->{
 			if (o instanceof Path) {
@@ -133,8 +140,8 @@ public class ARM_EABI_CppCompiler extends CCompiler<ARM_EABI_CppCompiler> {
 
 	@Override
 	public ARM_EABI_CppCompiler addOptimization(String optimization) {
-		flag("-"+optimization);
-		return null;
+		flag(optimization);
+		return this;
 	}
 
 	@Override

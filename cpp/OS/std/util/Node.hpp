@@ -2,7 +2,7 @@
  * Node.h
  *
  *  Created on: Feb 19, 2015
- *      Author: wfeehery17
+ *      Author: mailmindlin
  */
 
 #ifndef NODE_H_

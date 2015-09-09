@@ -2,6 +2,7 @@
 ROOT?=$(shell pwd)/
 # For the binary files
 BIN?=$(ROOT)bin/
+EMULATOR?=$(ROOT)qemu
 # Not really used
 JBIN?=$(BIN)java/
 # For the compiled assembly files
@@ -46,9 +47,13 @@ compile: init
 link: init
 	$(MK) link
 
+emulate:
+	$(MAKE) -C $(EMULATOR) BIN=$(BIN)
+
+#this should copy the kernel to a SD card inserted into a linux/mac machine. TODO: fix for windows
 mount: init
-	rm /Volumes/BOOT/Kernel.img
+	rm -f /Volumes/BOOT/Kernel.img
 	cp $(OUT) /Volumes/BOOT/Kernel.img
-	diskutil eject /dev/disk2
+	diskutil eject /dev/disk2 #fix ejecting the disk
 
 init:

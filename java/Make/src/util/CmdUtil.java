@@ -1,5 +1,6 @@
 package util;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -36,17 +37,23 @@ public class CmdUtil {
 			InterruptedException {
 		PipingOutputStream procStdOut = null, procErrOut = null;
 		PipingInputStream procStdIn = null;
-		procStdOut = new PipingOutputStream(new FileOutputStream(output));
+		//speeds up by >90% on one test
+		BufferedOutputStream os = new BufferedOutputStream(new FileOutputStream(output),1048576);
+		procStdOut = new PipingOutputStream(os);
 		procErrOut = new PipingOutputStream(System.err);
 		procStdIn = new PipingInputStream(System.in);
 		exec(props, command, procStdOut, procErrOut, procStdIn);
+		os.flush();
+		os.close();
+		System.out.println("Wrote "+output.length()/1024+" KB");
 	}
 
 	public static void exec(Properties props, String command, PipingOutputStream procStdOut,
 			PipingOutputStream procErrOut, PipingInputStream procStdIn) throws IOException,
 			InterruptedException {
+		Timer t=new Timer();
 		if ((props.<Integer> getOrUse("debug", 2)) > 1)
-			System.out.println(command);
+			System.out.println('\t'+command);
 		Process proc = null;
 		PipingOutputStream stdOut = null;
 		PipingInputStream stdIn = null, errIn = null;
@@ -100,13 +107,16 @@ public class CmdUtil {
 					errIn.closeAll();
 				} catch (Exception e) {
 				}
+			t.mark();
+			System.out.println("\tCommand took "+t.sec()+"s");
 		}
 	}
 
 	public static Result exec(String... command) {
+		final Timer t=new Timer();
 		final List<String> log = new LinkedList<String>(), errLog = new LinkedList<String>();
 		final List<Exception> errs = new LinkedList<Exception>();
-		System.out.println("Running: " + StrUtils.concatWithSpaces(command));
+		System.out.println("\tRunning: " + StrUtils.concatWithSpaces(command));
 		Process proc = null;
 		try {
 			proc = Runtime.getRuntime().exec(command);
@@ -118,23 +128,32 @@ public class CmdUtil {
 
 		BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
 		BufferedReader stdError = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
-		String tmp = null;
 		try {
-			do {
-				log.add((tmp = stdInput.readLine()));
-			} while (tmp != null);
+			while(stdInput.ready() || stdError.ready() || proc.isAlive()) {
+				boolean read=false;
+				if(read=stdInput.ready())
+					log.add(stdInput.readLine());
+				if(read|=stdError.ready())
+					errLog.add(stdError.readLine());
+				if(!read)
+					Thread.sleep(50);
+			}
 		} catch (Exception e) {
 			errs.add(e);
 		}
-
-		// read any errors from the attempted command
 		try {
-			do {
-				log.add((tmp = stdError.readLine()));
-			} while (tmp != null);
-		} catch (Exception e) {
+			stdInput.close();
+		} catch (IOException e) {
 			errs.add(e);
 		}
+		try {
+			stdError.close();
+		} catch (IOException e) {
+			errs.add(e);
+		}
+		t.mark();
+		System.out.println("\tCommand took "+t.sec()+"s");
+		proc.destroyForcibly();
 		return new Result(true,log,errLog,errs);
 	}
 
@@ -203,7 +222,7 @@ public class CmdUtil {
 			for (String line : log) {
 				if(line==null)
 					continue;
-				os.println(prefix + line);
+				os.print(prefix + line);
 				if(!line.endsWith("\n"))
 					os.println();
 			}
@@ -215,7 +234,7 @@ public class CmdUtil {
 			for (String line : errorLog) {
 				if(line==null)
 					continue;
-				os.println(prefix + line);
+				os.print(prefix + line);
 				if(!line.endsWith("\n"))
 					os.println();
 			}

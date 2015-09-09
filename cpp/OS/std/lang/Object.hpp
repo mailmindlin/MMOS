@@ -1,8 +1,10 @@
 /*
  * Object.hpp
- *
+ * This is a really useful class to have everything implement.
+ * For example, you can use instanceof() to fix generics stuff,
+ * toString() is incredibly helpful for debugging, and
  *  Created on: Feb 19, 2015
- *      Author: wfeehery17
+ *      Author: mailmindlin
  */
 
 #ifndef STDLIB_OBJECT_HPP_
@@ -21,10 +23,10 @@ public:
 	}
 	virtual ~Object() {
 	}
-	virtual bool equals(Object* other) const {
-		return this == other;
+	virtual bool equals(Object& other) const {
+		return getPtr() == other.getPtr();
 	}
-	uint32_t hashCode() {
+	uint32_t hashCode() const {
 		return (uint32_t) this;
 	}
 	virtual void notify() {/*do nothing*/
@@ -32,17 +34,14 @@ public:
 	virtual void notifyAll() {/*do nothing*/
 	}
 	virtual String& toString() const {
-		void* ptr=nullptr;
-		getPtr(ptr);
-		return valueOfPtr(ptr);
+		return valueOfPtr(this);
 	}
 	template<typename parent>
 	bool instanceof() const {
 		return dynamic_cast<const parent*>(this) != 0;
 	}
-	virtual void getPtr(const void* ptr) const {
-		if(ptr!=this)
-			ptr=this;
+	virtual const void* getPtr() const {
+		return static_cast<const void*>(this);
 	}
 protected:
 	virtual Object clone() const {
