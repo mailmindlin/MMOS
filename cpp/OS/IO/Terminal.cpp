@@ -207,6 +207,11 @@ void Terminal::writeString(const char* data) {
 		putChar(c);
 }
 
+void Terminal::writeString(size_t off, size_t len, const char* data) {
+	for (size_t i = 0; i < len; i++)
+		putChar(data[i + off]);
+}
+
 Terminal::~Terminal() {
 	//do nothing
 }

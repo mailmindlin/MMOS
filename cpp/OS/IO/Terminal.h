@@ -19,6 +19,7 @@ public:
 	void initialize();
 	void putChar(char c);
 	void writeString(const char* data);
+	void writeString(size_t offset, size_t length, const char* data);
 	void putEntryAt(char c, uint16_t color, size_t x, size_t y);
 	void setColor(uint8_t color);
 	static uint8_t makeColor(enum VGAColor fg, enum VGAColor bg);
