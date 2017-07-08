@@ -24,18 +24,23 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags) {
 	(void) r0;
 	(void) r1;
 	(void) atags;
+	
+	
 	//random example code. I'm still focused on the framework like OpenGL, filesystems, etc.
 	blink(3,0x7E000);
 	Peripherals::GPIO::setup();
 	blink(1,0x7E0000);
+	
 	//get framebuffer
-	FrameBufferDescription* result = Displays::GPU::initFrameBuffer(width,height,16);
+	FrameBufferDescription* result = Displays::GPU::initFrameBuffer(width, height, 16);
 	//check for failed framebuffer
-	if(result==0) {
+	if(!result) {
 		blink(0xFFFFFFF,0x1);
 		return;
+	} else {
+		blink(1,0x7E0000);
 	}
-	blink(1,0x7E0000);
+	
 	//main render loop
 	uint32_t color = 0;
 	while(true) {
@@ -48,26 +53,32 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags) {
 				ptr+=2;
 			}
 	}
-	Terminal* m = new Terminal(1024/5,768/5);
-	m->initialize();
-	m->writeString("ABC\0");
-	m->draw(width,height,result);
+	
+	Terminal* terminal = new Terminal(width/5, height/5);
+	terminal->initialize();
+	terminal->writeString(0, 3, "ABC\0");
+	terminal->draw(width, height, result);
+	blink(7,0x7E000);
+	terminal->writeString(0, 7, "\nABCDEF");
 	while(1);
 }
+
 extern "C"
 void kernel_shutdown() {
 	//turn off led
-	ASM::mmio_write(0x20200028,1<<16);//turn on led
+	ASM::mmio_write(0x20200028, 1<<16);//turn on led
 	blink(1,0x7E0000);
 	Peripherals::GPIO::shutdown();
 	blink(50,0x7E000);
 }
+
 extern "C++"
 void waitABit(uint32_t i) {
 	while(i-->0);
 }
+
 extern "C++"
-void blink(uint32_t amt,uint32_t speed) {
+void blink(uint32_t amt, uint32_t speed) {
 	//let's try to set a pixel grey
 //	uint16_t* pixel = (uint16_t*) 0xB8000;
 //	*pixel = 0x7020;
