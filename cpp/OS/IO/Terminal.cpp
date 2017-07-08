@@ -202,10 +202,11 @@ void Terminal::putChar(char c) {
 }
 
 void Terminal::writeString(const char* data) {
-	size_t datalen = strlen(data);
-	for (size_t i = 0; i < datalen; i++)
-		putChar(data[i]);
+	char c;
+	while (c = *data++)
+		putChar(c);
 }
+
 Terminal::~Terminal() {
 	//do nothing
 }
